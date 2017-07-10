@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.warinator.app.weatherornot.MainActivity">
+    tools:context="com.warinator.app.weatherornot.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/la_app_bar_layout"
@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/photo"
+                android:background="@color/colorPrimary"
                 android:tint="@color/colorPrimaryTransparent"
                 app:layout_collapseMode="parallax"/>
 

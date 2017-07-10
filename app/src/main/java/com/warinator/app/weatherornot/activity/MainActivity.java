@@ -1,11 +1,10 @@
-package com.warinator.app.weatherornot;
+package com.warinator.app.weatherornot.activity;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.warinator.app.weatherornot.GlideApp;
+import com.warinator.app.weatherornot.R;
 import com.warinator.app.weatherornot.model.CurrentWeather;
 import com.warinator.app.weatherornot.network.RetrofitClient;
 
@@ -29,16 +30,18 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-
-    private AppBarLayout mAppBarLayout;
     private Disposable mWeatherDisposable;
     private String mTitle = " ";
     @BindView(R.id.tb_main)
     Toolbar mToolbar;
     @BindView(R.id.la_collapsing_toolbar)
     CollapsingToolbarLayout mToolbarLayout;
+    @BindView(R.id.la_app_bar_layout)
+    AppBarLayout mAppBarLayout;
     @BindView(R.id.tv_weather_descr)
     TextView tvWeatherDescr;
     @BindView(R.id.tv_weather_deg)
@@ -52,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @BindView(R.id.iv_toolbar_bgr)
     ImageView ivToolbarBgr;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
 
-        mAppBarLayout = (AppBarLayout)findViewById(R.id.la_app_bar_layout);
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             private boolean mIsTitleShow = false;
             private int mScrollRange = -1;
@@ -105,13 +106,19 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                             DateFormat timeFormat = new SimpleDateFormat("HH:mm",Locale.getDefault());
                             tvUpdated.setText(timeFormat.format(Calendar.getInstance().getTime()));
 
-                            int iconResId = getResources().getIdentifier(String.format("b%s",
+                            int iconResId = getResources().getIdentifier(String.format("_%s",
                                     currentWeather.getWeather().get(0).getIcon()), "drawable", getPackageName());
-                            ivToolbarBgr.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, iconResId));
+                            GlideApp.with(MainActivity.this)
+                                    .load(iconResId)
+                                    .transition(withCrossFade())
+                                    .into(ivWeatherIcon);
 
-                            iconResId = getResources().getIdentifier(String.format("_%s",
+                            int bgrResId = getResources().getIdentifier(String.format("b%s",
                                     currentWeather.getWeather().get(0).getIcon()), "drawable", getPackageName());
-                            ivWeatherIcon.setImageDrawable(ContextCompat.getDrawable(MainActivity.this, iconResId));
+                            GlideApp.with(MainActivity.this)
+                                    .load(bgrResId)
+                                    .transition(withCrossFade())
+                                    .into(ivToolbarBgr);
 
                             mTitle = String.format(Locale.getDefault(),"%s, %s", temperature, conditions);
                         }
