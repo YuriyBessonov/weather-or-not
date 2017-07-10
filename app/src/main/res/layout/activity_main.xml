@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.warinator.app.weatherornot.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/la_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/la_collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_weather_height"
+            app:title=" "
+            app:expandedTitleTextAppearance="@android:color/transparent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="?attr/colorPrimary"
+            android:fitsSystemWindows="true">
+
+            <ImageView
+                android:id="@+id/iv_toolbar_bgr"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/photo"
+                android:tint="@color/colorPrimaryTransparent"
+                app:layout_collapseMode="parallax"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_location"
+                    tools:text="Новосибирск"
+                    android:layout_marginTop="@dimen/margin_half"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"/>
+
+                <TextView
+                    android:id="@+id/tv_updated"
+                    tools:text="12:03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/tv_location"/>
+
+                <RelativeLayout
+                    android:id="@+id/la_weather_main"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_updated"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/margin_double">
+
+                    <ImageView
+                        android:id="@+id/iv_weather_icon"
+                        android:layout_width="@dimen/icon_width_large"
+                        android:layout_height="@dimen/icon_width_large"
+                        android:scaleType="fitCenter"
+                        android:paddingRight="@dimen/margin_half"
+                        android:paddingBottom="@dimen/margin_half"
+                        tools:src="@drawable/_01d"/>
+
+                    <TextView
+                        android:paddingRight="@dimen/margin_half"
+                        android:id="@+id/tv_weather_deg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="+23"
+                        android:textStyle="normal|bold"
+                        android:layout_toRightOf="@id/iv_weather_icon"
+                        android:layout_alignTop="@id/iv_weather_icon"
+                        android:layout_alignBottom="@id/iv_weather_icon"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/text_size_large_xx"/>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_weather_descr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Переменная облачность"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@id/la_weather_main"/>
+
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tb_main"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                android:background="@null"
+                app:layout_anchor="@id/la_collapsing_toolbar"
+                app:layout_collapseMode="pin" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrv_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:behavior_overlapTop="@dimen/toolbar_overlap_top"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_half"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/lorem_ipsum"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+
+            </android.support.v7.widget.CardView>
+
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

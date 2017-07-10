@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_weather_height">264dp</dimen>
+    <dimen name="icon_width_large">64dp</dimen>
+    <dimen name="margin_standard">16dp</dimen>
+    <dimen name="text_size_large_xxx">48sp</dimen>
+    <dimen name="text_size_large_xx">44sp</dimen>
+    <dimen name="margin_half">8dp</dimen>
+    <dimen name="margin_double">32dp</dimen>
+    <dimen name="toolbar_overlap_top">64dp</dimen>
+</resources>
