@@ -1,9 +1,5 @@
 package com.warinator.app.weatherornot.model;
 
-/**
- * Created by Warinator on 10.07.2017.
- */
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

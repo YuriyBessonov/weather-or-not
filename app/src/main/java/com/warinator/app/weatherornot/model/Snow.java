@@ -3,7 +3,7 @@ package com.warinator.app.weatherornot.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Rain {
+public class Snow {
 
     @SerializedName("3h")
     @Expose

@@ -36,7 +36,7 @@ public class CurrentWeather {
     private int dt;
     @SerializedName("sys")
     @Expose
-    private Sys sys;
+    private SysCurrent sys;
     @SerializedName("id")
     @Expose
     private int id;
@@ -111,11 +111,11 @@ public class CurrentWeather {
         this.dt = dt;
     }
 
-    public Sys getSys() {
+    public SysCurrent getSys() {
         return sys;
     }
 
-    public void setSys(Sys sys) {
+    public void setSys(SysCurrent sys) {
         this.sys = sys;
     }
 

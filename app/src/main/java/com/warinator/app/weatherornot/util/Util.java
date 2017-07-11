@@ -1,6 +1,12 @@
 package com.warinator.app.weatherornot.util;
 
-import java.lang.reflect.Field;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+
+import com.warinator.app.weatherornot.R;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Warinator on 10.07.2017.
@@ -9,13 +15,48 @@ import java.lang.reflect.Field;
 public class Util {
     private Util(){}
 
-    public static int getResId(String resName, Class<?> c) {
-        try {
-            Field idField = c.getDeclaredField(resName);
-            return idField.getInt(idField);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
+    public static int getIconResId(String iconName, Context context) {
+       return context.getResources().getIdentifier(String.format("_%s", iconName),
+               "drawable", context.getPackageName());
+    }
+
+    public static int getBgrResId(String bgrName, Context context) {
+        return context.getResources().getIdentifier(String.format("b%s", bgrName),
+                "drawable", context.getPackageName());
+    }
+
+    public static boolean dateIsToday(Date date){
+        if (date == null){
+            return false;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        Calendar today = Calendar.getInstance();
+        if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && calendar.get(Calendar.MONTH) == today.get(Calendar.MONTH)
+                && calendar.get(Calendar.DATE) == today.get(Calendar.DATE)){
+            return true;
+        }
+        return false;
+    }
+
+
+
+    public static int getTimeOfDayColor(Date date, Context context){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        if (hour >= 0 && hour < 6){
+            return ContextCompat.getColor(context, R.color.colorNight);
+        }
+        else if (hour >= 6 && hour < 12){
+            return ContextCompat.getColor(context, R.color.colorMorning);
+        }
+        else if (hour >= 12 && hour < 18 ){
+            return ContextCompat.getColor(context, R.color.colorDay);
+        }
+        else {
+            return ContextCompat.getColor(context, R.color.colorEvening);
         }
     }
 }

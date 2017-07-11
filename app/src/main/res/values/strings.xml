@@ -27,4 +27,5 @@
         ultrices ut. Vestibulum in diam vitae ante tristique tincidunt. Morbi lacus massa, rhoncus sit amet rhoncus nec,
         iaculis ac nulla.</string>
     <string name="not_connected_to_internet">Отсуствует подключение к интернету</string>
+    <string name="today">сегодня</string>
 </resources>

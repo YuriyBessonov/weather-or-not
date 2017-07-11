@@ -8,4 +8,8 @@
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_double">32dp</dimen>
     <dimen name="toolbar_overlap_top">64dp</dimen>
+    <dimen name="margin_quarter">4dp</dimen>
+    <dimen name="text_size_large_x">18sp</dimen>
+    <dimen name="weather_card_padding">-6dp</dimen>
+    <dimen name="weather_card_elevation">4dp</dimen>
 </resources>

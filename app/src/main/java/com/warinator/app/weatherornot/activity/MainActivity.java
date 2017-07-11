@@ -7,35 +7,48 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.warinator.app.weatherornot.GlideApp;
 import com.warinator.app.weatherornot.R;
+import com.warinator.app.weatherornot.adapter.WeatherListAdapter;
 import com.warinator.app.weatherornot.model.CurrentWeather;
+import com.warinator.app.weatherornot.model.WeatherConditions;
+import com.warinator.app.weatherornot.model.WeatherForecast;
 import com.warinator.app.weatherornot.network.RetrofitClient;
+import com.warinator.app.weatherornot.util.FormatUtil;
+import com.warinator.app.weatherornot.util.Util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    private Disposable mWeatherDisposable;
+    private static final int NETWORK_TIMEOUT = 15;//сек.
+    private CompositeDisposable mWeatherDisposable;
     private String mTitle = " ";
+    private WeatherListAdapter mWeatherListAdapter;
+    private List<WeatherConditions> mWeatherConditionsList;
     @BindView(R.id.tb_main)
     Toolbar mToolbar;
     @BindView(R.id.la_collapsing_toolbar)
@@ -54,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     ImageView ivWeatherIcon;
     @BindView(R.id.iv_toolbar_bgr)
     ImageView ivToolbarBgr;
+    @BindView(R.id.rv_weather_list)
+    RecyclerView rvWeatherList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,39 +97,56 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
 
+        rvWeatherList.setLayoutManager(new LinearLayoutManager(this));
+        mWeatherConditionsList = new ArrayList<>();
+        mWeatherListAdapter = new WeatherListAdapter(this,mWeatherConditionsList);
+        rvWeatherList.setAdapter(mWeatherListAdapter);
+        rvWeatherList.setItemAnimator(new DefaultItemAnimator());
+
+        mWeatherDisposable = new CompositeDisposable();
         refreshWeather();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mWeatherDisposable != null && !mWeatherDisposable.isDisposed()){
+            mWeatherDisposable.dispose();
+        }
+        super.onDestroy();
+    }
+
     public void refreshWeather(){
-        Observable<CurrentWeather> call = RetrofitClient.getWeatherApi().getCurrent("Novosibirsk");
+        Observable<CurrentWeather> currentWeatherObs = RetrofitClient.getWeatherApi().getCurrent("Novosibirsk");
+        Observable<WeatherForecast> forecastObs = RetrofitClient.getWeatherApi().getForecast("Novosibirsk");
         if (isNetworkConnected()){
             if (mWeatherDisposable != null && !mWeatherDisposable.isDisposed()){
                 mWeatherDisposable.dispose();
+                mWeatherDisposable = new CompositeDisposable();
             }
-            mWeatherDisposable = call.observeOn(AndroidSchedulers.mainThread())
+            mWeatherDisposable.add(
+                    currentWeatherObs.observeOn(AndroidSchedulers.mainThread())
+                    .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
                     .subscribeWith(new DisposableObserver<CurrentWeather>(){
                         @Override
                         public void onNext(@NonNull CurrentWeather currentWeather) {
                             //TODO: изменить дату обновления
                             //TODO: сохранить погоду в БД
-                            String temperature = String.format(Locale.getDefault(),"%+d",
-                                    Math.round(currentWeather.getMain().getTemp()));
+                            String temperature = FormatUtil.getFormattedTemperature(currentWeather.getMain().getTemp());
                             String conditions = currentWeather.getWeather().get(0).getDescription();
                             tvWeatherDescr.setText(conditions);
                             tvWeatherDeg.setText(temperature);
                             tvLocation.setText(currentWeather.getName());
-                            DateFormat timeFormat = new SimpleDateFormat("HH:mm",Locale.getDefault());
-                            tvUpdated.setText(timeFormat.format(Calendar.getInstance().getTime()));
+                            tvUpdated.setText(FormatUtil.getFormattedTime(Calendar.getInstance().getTime()));
 
-                            int iconResId = getResources().getIdentifier(String.format("_%s",
-                                    currentWeather.getWeather().get(0).getIcon()), "drawable", getPackageName());
+                            int iconResId = Util.getIconResId(currentWeather.getWeather().get(0).getIcon(),
+                                    MainActivity.this);
                             GlideApp.with(MainActivity.this)
                                     .load(iconResId)
                                     .transition(withCrossFade())
                                     .into(ivWeatherIcon);
 
-                            int bgrResId = getResources().getIdentifier(String.format("b%s",
-                                    currentWeather.getWeather().get(0).getIcon()), "drawable", getPackageName());
+                            int bgrResId = Util.getBgrResId(currentWeather.getWeather().get(0).getIcon(),
+                                    MainActivity.this);
                             GlideApp.with(MainActivity.this)
                                     .load(bgrResId)
                                     .transition(withCrossFade())
@@ -125,13 +157,33 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-                            Toast.makeText(MainActivity.this,"Не удалось обновить погоду", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this,"Не удалось обновить текущую погоду", Toast.LENGTH_SHORT).show();
+                            Log.d("WEATHER","NOW",e);
                         }
 
                         @Override
-                        public void onComplete() {
+                        public void onComplete() {}
+                    }));
+
+            mWeatherDisposable.add(forecastObs.observeOn(AndroidSchedulers.mainThread())
+                    .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
+                    .subscribeWith(new DisposableObserver<WeatherForecast>(){
+                        @Override
+                        public void onNext(@NonNull WeatherForecast forecast) {
+                            mWeatherConditionsList.clear();
+                            mWeatherConditionsList.addAll(forecast.getList());
+                            mWeatherListAdapter.notifyDataSetChanged();
                         }
-                    });
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            Toast.makeText(MainActivity.this,"Не удалось обновить прогноз", Toast.LENGTH_SHORT).show();
+                            Log.d("WEATHER","FORECAST",e);
+                        }
+
+                        @Override
+                        public void onComplete() {}
+                    }));
         }
         else {
             Toast.makeText(MainActivity.this,

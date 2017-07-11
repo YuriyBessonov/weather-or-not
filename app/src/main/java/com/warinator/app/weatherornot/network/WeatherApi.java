@@ -1,6 +1,7 @@
 package com.warinator.app.weatherornot.network;
 
 import com.warinator.app.weatherornot.model.CurrentWeather;
+import com.warinator.app.weatherornot.model.WeatherForecast;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -12,7 +13,13 @@ import retrofit2.http.Query;
 
 public interface WeatherApi {
     String CURRENT_WEATHER = "weather?units=metric&lang=ru&APPID=ee149d0c39bbb291d9b5e1ce23a16301";
+    String FORECAST = "forecast?units=metric&lang=ru&APPID=ee149d0c39bbb291d9b5e1ce23a16301";
+    //String FORECAST = "forecast?APPID=ee149d0c39bbb291d9b5e1ce23a16301";
 
     @GET(CURRENT_WEATHER)
     Observable<CurrentWeather> getCurrent(@Query("q") String city);
+
+    @GET(FORECAST)
+    Observable<WeatherForecast> getForecast(@Query("q") String city);
+
 }
