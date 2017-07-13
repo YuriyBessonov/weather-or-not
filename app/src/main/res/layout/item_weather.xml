@@ -13,63 +13,70 @@
         android:layout_height="wrap_content"
         app:cardElevation="@dimen/weather_card_elevation"
         app:cardUseCompatPadding="true"
-        android:layout_marginTop="@dimen/weather_card_padding">
-        <RelativeLayout
-            android:id="@+id/la_weather_item"
+        android:layout_marginTop="@dimen/weather_card_padding"
+        android:background="@color/colorPrimaryDark">
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/margin_standard"
             android:background="@color/colorGreyVeryLight">
-            <TextView
-                tools:text="вт, 11 июля"
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                tools:text="12:00"
-                android:id="@+id/tv_time"
-                android:layout_below="@id/tv_date"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/la_weather_item"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_large_x"/>
-            <ImageView
-                android:id="@+id/iv_weather_icon"
-                android:layout_alignParentRight="true"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="centerInside"
-                android:paddingBottom="@dimen/margin_quarter"
-                android:paddingRight="@dimen/margin_quarter"
-                tools:src="@drawable/_01d"/>
+                android:padding="@dimen/margin_standard"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true">
+                <TextView
+                    tools:text="вт, 11 июля"
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    tools:text="12:00"
+                    android:id="@+id/tv_time"
+                    android:layout_below="@id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_large_x"/>
+                <ImageView
+                    android:id="@+id/iv_weather_icon"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerInside"
+                    android:paddingBottom="@dimen/margin_quarter"
+                    android:paddingRight="@dimen/margin_quarter"
+                    tools:src="@drawable/_01d"/>
 
-            <TextView
-                tools:text="+19"
-                android:id="@+id/tv_weather_deg"
-                android:layout_below="@id/tv_weather_descr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/iv_weather_icon"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="normal|bold"
-                android:layout_alignTop="@id/iv_weather_icon"
-                android:layout_alignBottom="@id/iv_weather_icon"
-                android:gravity="center_vertical"
-                android:layout_marginRight="@dimen/margin_half"
-                android:textSize="@dimen/text_size_large_x"/>
-            <TextView
-                tools:text="солнечно"
-                android:id="@+id/tv_weather_descr"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@id/tv_date"
-                android:layout_toLeftOf="@id/tv_weather_deg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_standard"
-                android:layout_marginRight="@dimen/margin_standard"
-                android:gravity="center"
-                android:textColor="@color/colorGrey"
-                />
-        </RelativeLayout>
+                <TextView
+                    tools:text="+19"
+                    android:id="@+id/tv_weather_deg"
+                    android:layout_below="@id/tv_weather_descr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/iv_weather_icon"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="normal|bold"
+                    android:layout_alignTop="@id/iv_weather_icon"
+                    android:layout_alignBottom="@id/iv_weather_icon"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="@dimen/margin_half"
+                    android:textSize="@dimen/text_size_large_x"/>
+                <TextView
+                    tools:text="солнечно"
+                    android:id="@+id/tv_weather_descr"
+                    android:layout_centerInParent="true"
+                    android:layout_toRightOf="@id/tv_date"
+                    android:layout_toLeftOf="@id/tv_weather_deg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_standard"
+                    android:layout_marginRight="@dimen/margin_standard"
+                    android:gravity="center"
+                    android:textColor="@color/colorGrey"/>
+            </RelativeLayout>
+        </FrameLayout>
+
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

@@ -3,10 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/la_main_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/colorPrimaryLight"
     tools:context="com.warinator.app.weatherornot.activity.MainActivity">
+
+    <xyz.matteobattilana.library.WeatherView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/weather_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:angle="-5"
+        app:fadeOutTime="1000"
+        app:fps="40"
+        app:lifeTime="2200"
+        app:numParticles="55"
+        app:orientationMode="ENABLE"
+        app:startingWeather="SUN"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/la_app_bar_layout"
@@ -85,7 +100,7 @@
                         android:layout_alignTop="@id/iv_weather_icon"
                         android:layout_alignBottom="@id/iv_weather_icon"
                         android:gravity="center_vertical"
-                        android:textSize="@dimen/text_size_large_xx"/>
+                        android:textSize="@dimen/text_size_large_xxxx"/>
                 </RelativeLayout>
 
                 <TextView
@@ -112,7 +127,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_weather_list"
         android:layout_width="match_parent"
@@ -122,41 +136,5 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_weather"/>
 
-<!--
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrv_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:behavior_overlapTop="@dimen/toolbar_overlap_top"
-        android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_half"
-                app:cardElevation="4dp"
-                app:cardUseCompatPadding="true">
-
-                <TextView
-                    android:id="@+id/description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:text="@string/lorem_ipsum"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
-
-            </android.support.v7.widget.CardView>
-
-        </FrameLayout>
-
-    </android.support.v4.widget.NestedScrollView>
-
--->
 
 </android.support.design.widget.CoordinatorLayout>

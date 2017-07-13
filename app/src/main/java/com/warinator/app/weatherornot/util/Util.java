@@ -8,6 +8,8 @@ import com.warinator.app.weatherornot.R;
 import java.util.Calendar;
 import java.util.Date;
 
+import xyz.matteobattilana.library.Common.Constants;
+
 /**
  * Created by Warinator on 10.07.2017.
  */
@@ -57,6 +59,23 @@ public class Util {
         }
         else {
             return ContextCompat.getColor(context, R.color.colorEvening);
+        }
+    }
+
+    public static float hPaToMmHg(float hPa){
+        return hPa*0.75006f;
+    }
+
+    public static Constants.weatherStatus getWeatherStatus(int weatherCode){
+        int code = weatherCode / 100;
+        if (code == 2 || code == 3 || code == 5){
+            return Constants.weatherStatus.RAIN;
+        }
+        else if (code == 6){
+            return Constants.weatherStatus.SNOW;
+        }
+        else {
+            return Constants.weatherStatus.SUN;
         }
     }
 }

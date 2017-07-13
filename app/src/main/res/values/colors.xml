@@ -3,6 +3,7 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimaryLight">#9FA8DA</color>
     <color name="colorPrimaryTransparent">#663F51B5</color>
     <color name="colorWhite">#F5F5F5</color>
     <color name="colorGreyVeryLight">#EEEEEE</color>
@@ -13,5 +14,6 @@
     <color name="colorDay">#2196F3</color>
     <color name="colorEvening">#512DA8</color>
     <color name="colorNight">#453C73</color>
+
 
 </resources>

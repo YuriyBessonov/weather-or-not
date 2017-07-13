@@ -3,13 +3,20 @@
     <dimen name="toolbar_weather_height">264dp</dimen>
     <dimen name="icon_width_large">64dp</dimen>
     <dimen name="margin_standard">16dp</dimen>
-    <dimen name="text_size_large_xxx">48sp</dimen>
-    <dimen name="text_size_large_xx">44sp</dimen>
     <dimen name="margin_half">8dp</dimen>
     <dimen name="margin_double">32dp</dimen>
     <dimen name="toolbar_overlap_top">64dp</dimen>
     <dimen name="margin_quarter">4dp</dimen>
+    <dimen name="text_size_large">16sp</dimen>
     <dimen name="text_size_large_x">18sp</dimen>
+    <dimen name="text_size_large_xx">20sp</dimen>
+    <dimen name="text_size_large_xxx">28sp</dimen>
+    <dimen name="text_size_large_xxxx">44sp</dimen>
+    <dimen name="text_size_large_xxxxx">48sp</dimen>
     <dimen name="weather_card_padding">-6dp</dimen>
     <dimen name="weather_card_elevation">4dp</dimen>
+    <dimen name="margin_weather_icon_adj">12dp</dimen>
+    <dimen name="elevation_toolbar">4dp</dimen>
+    <dimen name="margin_x4">64dp</dimen>
+    <dimen name="icon_width_very_large">128dp</dimen>
 </resources>

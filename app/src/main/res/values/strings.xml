@@ -28,4 +28,28 @@
         iaculis ac nulla.</string>
     <string name="not_connected_to_internet">Отсуствует подключение к интернету</string>
     <string name="today">сегодня</string>
+    <string name="forecast_details">Подробности прогноза</string>
+    <string name="format_wind"  formatted="false">"%s, %d м/с"</string>
+    <string name="format_percent_int"  formatted="false">"%d%%"</string>
+    <string name="format_pressure"  formatted="false">"%d мм рт. ст."</string>
+
+    <string-array name="wind_directions">
+        <item>С</item>
+        <item>ССВ</item>
+        <item>СВ</item>
+        <item>ВСВ</item>
+        <item>В</item>
+        <item>ВЮВ</item>
+        <item>ЮВ</item>
+        <item>ЮЮВ</item>
+        <item>Ю</item>
+        <item>ЮЮЗ</item>
+        <item>ЮЗ</item>
+        <item>ЗЮЗ</item>
+        <item>З</item>
+        <item>ЗСЗ</item>
+        <item>СЗ</item>
+        <item>ССЗ</item>
+    </string-array>
+
 </resources>

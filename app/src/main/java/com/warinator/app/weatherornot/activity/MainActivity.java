@@ -11,7 +11,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,16 +38,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
+import xyz.matteobattilana.library.Common.Constants;
+import xyz.matteobattilana.library.WeatherView;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int NETWORK_TIMEOUT = 15;//сек.
-    private CompositeDisposable mWeatherDisposable;
-    private String mTitle = " ";
-    private WeatherListAdapter mWeatherListAdapter;
-    private List<WeatherConditions> mWeatherConditionsList;
+
     @BindView(R.id.tb_main)
     Toolbar mToolbar;
     @BindView(R.id.la_collapsing_toolbar)
@@ -69,6 +67,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     ImageView ivToolbarBgr;
     @BindView(R.id.rv_weather_list)
     RecyclerView rvWeatherList;
+    @BindView(R.id.weather_view)
+    WeatherView weatherView;
+
+    private CompositeDisposable mWeatherDisposable;
+    private String mTitle = " ";
+    private WeatherListAdapter mWeatherListAdapter;
+    private List<WeatherConditions> mWeatherConditionsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         mWeatherDisposable = new CompositeDisposable();
         refreshWeather();
+        weatherView.setWeather(Constants.weatherStatus.RAIN)
+                .startAnimation();
     }
 
     @Override
@@ -152,13 +159,22 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                     .transition(withCrossFade())
                                     .into(ivToolbarBgr);
 
+
                             mTitle = String.format(Locale.getDefault(),"%s, %s", temperature, conditions);
+                            Constants.weatherStatus status = Util.
+                                    getWeatherStatus(currentWeather.getWeather().get(0).getId());
+                            weatherView.setWeather(status);
+                            if (status == Constants.weatherStatus.SUN){
+                                weatherView.stopAnimation();
+                            }
+                            else {
+                                weatherView.startAnimation();
+                            }
                         }
 
                         @Override
                         public void onError(@NonNull Throwable e) {
                             Toast.makeText(MainActivity.this,"Не удалось обновить текущую погоду", Toast.LENGTH_SHORT).show();
-                            Log.d("WEATHER","NOW",e);
                         }
 
                         @Override
@@ -178,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         @Override
                         public void onError(@NonNull Throwable e) {
                             Toast.makeText(MainActivity.this,"Не удалось обновить прогноз", Toast.LENGTH_SHORT).show();
-                            Log.d("WEATHER","FORECAST",e);
                         }
 
                         @Override

@@ -37,4 +37,11 @@ public class FormatUtil {
         return String.format(Locale.getDefault(),"%+d",
                 Math.round(temperature));
     }
+
+    public static String getWindDirection(float windDegree, Context context){
+        String[] directions = context.getResources().
+                getStringArray(R.array.wind_directions);
+        int ind = (int) ((windDegree/22.5)+.5);
+        return directions[ind % directions.length];
+    }
 }
