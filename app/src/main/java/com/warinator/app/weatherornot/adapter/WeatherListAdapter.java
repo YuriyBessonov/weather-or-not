@@ -110,6 +110,7 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
                     .pressure(weather.getMain().getPressure())
                     .windDegrees(weather.getWind().getDeg())
                     .windSpeed(weather.getWind().getSpeed())
+                    .weatherCode(weather.getWeather().get(0).getId())
                     .icon(mIconResId);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder.transitionName(ivIcon.getTransitionName());

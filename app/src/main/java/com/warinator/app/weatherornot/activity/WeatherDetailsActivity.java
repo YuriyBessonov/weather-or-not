@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import xyz.matteobattilana.library.Common.Constants;
+import xyz.matteobattilana.library.WeatherView;
 
 public class WeatherDetailsActivity extends AppCompatActivity {
 
@@ -34,6 +36,7 @@ public class WeatherDetailsActivity extends AppCompatActivity {
     private static final String ARG_DESCRIPTION = "description";
     private static final String ARG_HUMIDITY = "humidity";
     private static final String ARG_PRESSURE = "pressure";
+    private static final String ARG_WEATHER_CODE = "weather_code";
     private static final String ARG_TRANSITION_NAME = "transition_name";
 
     @BindView(R.id.tb_weather_details)
@@ -61,6 +64,8 @@ public class WeatherDetailsActivity extends AppCompatActivity {
     RelativeLayout laWeatherMain;
     @BindView(R.id.cv_weather_details)
     CardView cvWeatherDetails;
+    @BindView(R.id.weather_view)
+    WeatherView weatherView;
 
     private String mTransitonName;
 
@@ -106,6 +111,16 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         int pressure = Math.round(Util.hPaToMmHg(bundle.getFloat(ARG_HUMIDITY)));
         tvPressure.setText(String.format(Locale.getDefault(),
                 getString(R.string.format_pressure),pressure));
+        Constants.weatherStatus status =
+                Util.getWeatherStatus(bundle.getInt(ARG_WEATHER_CODE));
+        weatherView.setWeather(status);
+        if (status == Constants.weatherStatus.SUN){
+            weatherView.stopAnimation();
+        }
+        else {
+            weatherView.startAnimation();
+        }
+
     }
 
     private void setupAnimations(){
@@ -163,6 +178,11 @@ public class WeatherDetailsActivity extends AppCompatActivity {
 
         public IntentBuilder transitionName(String transitionName){
             mIntent.putExtra(ARG_TRANSITION_NAME, transitionName);
+            return this;
+        }
+
+        public IntentBuilder weatherCode(int weatherCode){
+            mIntent.putExtra(ARG_WEATHER_CODE, weatherCode);
             return this;
         }
 

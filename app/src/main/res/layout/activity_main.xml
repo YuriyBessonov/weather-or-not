@@ -15,7 +15,7 @@
         android:id="@+id/weather_view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        app:angle="-5"
+        app:angle="-30"
         app:fadeOutTime="1000"
         app:fps="40"
         app:lifeTime="2200"
@@ -40,15 +40,23 @@
             app:contentScrim="?attr/colorPrimary"
             android:fitsSystemWindows="true">
 
-            <ImageView
-                android:id="@+id/iv_toolbar_bgr"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:background="@color/colorPrimary"
-                android:tint="@color/colorPrimaryTransparent"
-                app:layout_collapseMode="parallax"/>
-
+                app:layout_collapseMode="parallax">
+                <ImageView
+                    tools:src="@drawable/b03d"
+                    android:id="@+id/iv_toolbar_bgr"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:background="@color/colorPrimary"
+                    android:tint="@color/colorPrimaryTransparent"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient"/>
+            </FrameLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"

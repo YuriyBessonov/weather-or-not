@@ -110,8 +110,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         mWeatherDisposable = new CompositeDisposable();
         refreshWeather();
-        weatherView.setWeather(Constants.weatherStatus.RAIN)
-                .startAnimation();
     }
 
     @Override

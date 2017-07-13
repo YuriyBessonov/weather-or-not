@@ -9,6 +9,19 @@
     android:background="@color/colorPrimary"
     tools:context="com.warinator.app.weatherornot.activity.WeatherDetailsActivity">
 
+    <xyz.matteobattilana.library.WeatherView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/weather_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:angle="-30"
+        app:fadeOutTime="1000"
+        app:fps="40"
+        app:lifeTime="2200"
+        app:numParticles="55"
+        app:orientationMode="ENABLE"
+        app:startingWeather="SUN"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_weather_details"
         android:layout_width="match_parent"
