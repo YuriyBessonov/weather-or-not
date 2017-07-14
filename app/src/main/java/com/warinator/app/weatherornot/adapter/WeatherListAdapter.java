@@ -59,7 +59,6 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         holder.tvTime.setTextColor(Util.getTimeOfDayColor(date, mContext));
         holder.tvDate.setText(FormatUtil.getFormattedDate(date, mContext));
         holder.tvTime.setText(FormatUtil.getFormattedTime(date));
-        holder.tvDescription.setText(weather.getWeather().get(0).getDescription());
         holder.tvTemperature.setText(FormatUtil
                 .getFormattedTemperature(weather.getMain().getTemp()));
         int iconResId = Util.getIconResId(weather.getWeather().get(0).getIcon(),mContext);
@@ -84,8 +83,6 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         TextView tvDate;
         @BindView(R.id.tv_time)
         TextView tvTime;
-        @BindView(R.id.tv_weather_descr)
-        TextView tvDescription;
         @BindView(R.id.tv_weather_deg)
         TextView tvTemperature;
         @BindView(R.id.iv_weather_icon)

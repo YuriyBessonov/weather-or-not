@@ -69,7 +69,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/tv_date"
-                        android:textSize="@dimen/text_size_large_xx"
+                        android:textSize="@dimen/text_size_large_2"
                         tools:text="12:00"/>
 
                     <TextView
@@ -94,7 +94,7 @@
                         android:id="@+id/tv_weather_deg"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/text_size_large_xxx"
+                        android:textSize="@dimen/text_size_large_4"
                         android:textStyle="bold"
                         tools:text="+19"/>
 
@@ -137,13 +137,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/margin_standard"
                             android:text="Ветер: "
-                            android:textSize="@dimen/text_size_large_x"/>
+                            android:textSize="@dimen/text_size_large_1"/>
 
                         <TextView
                             android:id="@+id/tv_wind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textSize="@dimen/text_size_large_x"
+                            android:textSize="@dimen/text_size_large_1"
                             android:textStyle="normal|bold"
                             android:textColor="@color/colorAccent"
                             tools:text="50 м/с"/>
@@ -154,14 +154,14 @@
                             android:layout_marginRight="@dimen/margin_standard"
                             android:text="Влажность: "
                             android:layout_marginTop="@dimen/margin_half"
-                            android:textSize="@dimen/text_size_large_x"/>
+                            android:textSize="@dimen/text_size_large_1"/>
 
                         <TextView
                             android:id="@+id/tv_humidity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_half"
-                            android:textSize="@dimen/text_size_large_x"
+                            android:textSize="@dimen/text_size_large_1"
                             android:textColor="@color/colorAccent"
                             android:textStyle="normal|bold"
                             tools:text="83%"/>
@@ -172,7 +172,7 @@
                             android:layout_marginTop="@dimen/margin_half"
                             android:layout_marginRight="@dimen/margin_standard"
                             android:text="Давление: "
-                            android:textSize="@dimen/text_size_large_x"/>
+                            android:textSize="@dimen/text_size_large_1"/>
 
                         <TextView
                             android:layout_marginTop="@dimen/margin_half"
@@ -180,7 +180,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/text_size_large_x"
+                            android:textSize="@dimen/text_size_large_1"
                             android:textStyle="normal|bold"
                             tools:text="83%"/>
 

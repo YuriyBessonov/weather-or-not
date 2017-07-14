@@ -34,11 +34,15 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import xyz.matteobattilana.library.Common.Constants;
 import xyz.matteobattilana.library.WeatherView;
 
@@ -72,8 +76,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     WeatherView weatherView;
     @BindView(R.id.tv_toolbar_title)
     TextView tvToolbarTitle;
+    @BindView(R.id.la_swipe_refresh)
+    SwipeRefreshLayout laSwipeRefresh;
 
-    private CompositeDisposable mWeatherDisposable;
+
+    private Disposable mWeatherDisposable;
     private String mTitle = " ";
     private WeatherListAdapter mWeatherListAdapter;
     private List<WeatherConditions> mWeatherConditionsList;
@@ -93,6 +100,13 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             private int mScrollRange = -1;
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset >= 0){
+                    laSwipeRefresh.setEnabled(true);
+                }
+                else if (!laSwipeRefresh.isRefreshing())
+                {
+                    laSwipeRefresh.setEnabled(false);
+                }
                 if (mScrollRange == -1) {
                     mScrollRange = appBarLayout.getTotalScrollRange();
                 }
@@ -112,8 +126,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         rvWeatherList.setAdapter(mWeatherListAdapter);
         rvWeatherList.setItemAnimator(new DefaultItemAnimator());
 
+        laSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshWeather();
+            }
+        });
+
         mWeatherDisposable = new CompositeDisposable();
         refreshWeather();
+
     }
 
     @Override
@@ -124,20 +146,26 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onDestroy();
     }
 
+    @OnClick(R.id.iv_refresh)
+    public void onRefreshClick(){
+        laSwipeRefresh.setEnabled(true);
+        laSwipeRefresh.setRefreshing(true);
+        refreshWeather();
+    }
+
+
     public void refreshWeather(){
         Observable<CurrentWeather> currentWeatherObs = RetrofitClient.getWeatherApi().getCurrent("Novosibirsk");
-        Observable<WeatherForecast> forecastObs = RetrofitClient.getWeatherApi().getForecast("Novosibirsk");
         if (isNetworkConnected()){
-            if (mWeatherDisposable != null && !mWeatherDisposable.isDisposed()){
+            if (mWeatherDisposable != null){
                 mWeatherDisposable.dispose();
-                mWeatherDisposable = new CompositeDisposable();
             }
-            mWeatherDisposable.add(
-                    currentWeatherObs.observeOn(AndroidSchedulers.mainThread())
+            mWeatherDisposable = currentWeatherObs
+                    .observeOn(AndroidSchedulers.mainThread())
                     .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-                    .subscribeWith(new DisposableObserver<CurrentWeather>(){
+                    .concatMap(new Function<CurrentWeather, Observable<WeatherForecast>>() {
                         @Override
-                        public void onNext(@NonNull CurrentWeather currentWeather) {
+                        public Observable<WeatherForecast> apply(@NonNull CurrentWeather currentWeather) throws Exception {
                             //TODO: изменить дату обновления
                             //TODO: сохранить погоду в БД
                             String temperature = FormatUtil.getFormattedTemperature(currentWeather.getMain().getTemp());
@@ -161,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                     .transition(withCrossFade())
                                     .into(ivToolbarBgr);
 
-
                             mTitle = String.format(Locale.getDefault(),"%s, %s", temperature, conditions);
                             tvToolbarTitle.setText(mTitle);
                             Constants.weatherStatus status = Util.
@@ -173,22 +200,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                             else {
                                 weatherView.startAnimation();
                             }
+
+                            return RetrofitClient.getWeatherApi().getForecast("Novosibirsk");
                         }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-                            Toast.makeText(MainActivity.this,"Не удалось обновить текущую погоду", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onComplete() {}
-                    }));
-
-            mWeatherDisposable.add(forecastObs.observeOn(AndroidSchedulers.mainThread())
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
                     .subscribeWith(new DisposableObserver<WeatherForecast>(){
                         @Override
                         public void onNext(@NonNull WeatherForecast forecast) {
+                            laSwipeRefresh.setRefreshing(false);
                             mWeatherConditionsList.clear();
                             mWeatherConditionsList.addAll(forecast.getList());
                             mWeatherListAdapter.notifyDataSetChanged();
@@ -196,14 +218,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
                         @Override
                         public void onError(@NonNull Throwable e) {
-                            Toast.makeText(MainActivity.this,"Не удалось обновить прогноз", Toast.LENGTH_SHORT).show();
+                            laSwipeRefresh.setRefreshing(false);
+                            Toast.makeText(MainActivity.this,"Не удалось обновить погоду", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
-                        public void onComplete() {}
-                    }));
+                        public void onComplete() {
+                        }
+                    });
         }
         else {
+            laSwipeRefresh.setRefreshing(false);
             Toast.makeText(MainActivity.this,
                     R.string.not_connected_to_internet, Toast.LENGTH_SHORT).show();
             //TODO: загрузить погоду из БД

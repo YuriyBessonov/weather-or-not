@@ -9,11 +9,12 @@
     <dimen name="toolbar_overlap_top">64dp</dimen>
     <dimen name="margin_quarter">4dp</dimen>
     <dimen name="text_size_large">16sp</dimen>
-    <dimen name="text_size_large_x">18sp</dimen>
-    <dimen name="text_size_large_xx">20sp</dimen>
-    <dimen name="text_size_large_xxx">28sp</dimen>
-    <dimen name="text_size_large_xxxx">44sp</dimen>
-    <dimen name="text_size_large_xxxxx">48sp</dimen>
+    <dimen name="text_size_large_1">18sp</dimen>
+    <dimen name="text_size_large_2">20sp</dimen>
+    <dimen name="text_size_large_3">24sp</dimen>
+    <dimen name="text_size_large_4">28sp</dimen>
+    <dimen name="text_size_large_5">44sp</dimen>
+    <dimen name="text_size_large_6">48sp</dimen>
     <dimen name="weather_card_padding">-6dp</dimen>
     <dimen name="weather_card_elevation">4dp</dimen>
     <dimen name="margin_weather_icon_adj">12dp</dimen>
@@ -21,4 +22,5 @@
     <dimen name="margin_x4">64dp</dimen>
     <dimen name="icon_width_very_large">128dp</dimen>
     <dimen name="toolbar_icon_margin">6dp</dimen>
+    <dimen name="item_weather_time_width">54dp</dimen>
 </resources>
