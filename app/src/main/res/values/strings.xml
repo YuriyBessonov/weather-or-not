@@ -34,22 +34,22 @@
     <string name="format_pressure"  formatted="false">"%d мм рт. ст."</string>
 
     <string-array name="wind_directions">
-        <item>С</item>
-        <item>ССВ</item>
-        <item>СВ</item>
-        <item>ВСВ</item>
-        <item>В</item>
-        <item>ВЮВ</item>
-        <item>ЮВ</item>
-        <item>ЮЮВ</item>
-        <item>Ю</item>
-        <item>ЮЮЗ</item>
-        <item>ЮЗ</item>
-        <item>ЗЮЗ</item>
-        <item>З</item>
-        <item>ЗСЗ</item>
-        <item>СЗ</item>
-        <item>ССЗ</item>
+        <item>с</item>
+        <item>ссв</item>
+        <item>св</item>
+        <item>всв</item>
+        <item>в</item>
+        <item>вюв</item>
+        <item>юв</item>
+        <item>ююв</item>
+        <item>ю</item>
+        <item>ююз</item>
+        <item>юз</item>
+        <item>зюз</item>
+        <item>з</item>
+        <item>зсз</item>
+        <item>сз</item>
+        <item>ссз</item>
     </string-array>
 
 </resources>

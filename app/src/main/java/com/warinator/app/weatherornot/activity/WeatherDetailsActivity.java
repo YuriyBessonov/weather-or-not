@@ -108,9 +108,9 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         int humidity = Math.round(bundle.getFloat(ARG_HUMIDITY));
         tvHumidity.setText(String.format(Locale.getDefault(),
                 getString(R.string.format_percent_int), humidity ));
-        int pressure = Math.round(Util.hPaToMmHg(bundle.getFloat(ARG_HUMIDITY)));
+        int pressure = Math.round(Util.hPaToMmHg(bundle.getFloat(ARG_PRESSURE)));
         tvPressure.setText(String.format(Locale.getDefault(),
-                getString(R.string.format_pressure),pressure));
+                    getString(R.string.format_pressure),pressure));
         Constants.weatherStatus status =
                 Util.getWeatherStatus(bundle.getInt(ARG_WEATHER_CODE));
         weatherView.setWeather(status);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="toolbar_weather_height">264dp</dimen>
+    <dimen name="icon_width_standard">48dp</dimen>
     <dimen name="icon_width_large">64dp</dimen>
     <dimen name="margin_standard">16dp</dimen>
     <dimen name="margin_half">8dp</dimen>
@@ -19,4 +20,5 @@
     <dimen name="elevation_toolbar">4dp</dimen>
     <dimen name="margin_x4">64dp</dimen>
     <dimen name="icon_width_very_large">128dp</dimen>
+    <dimen name="toolbar_icon_margin">6dp</dimen>
 </resources>

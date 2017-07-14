@@ -11,6 +11,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     RecyclerView rvWeatherList;
     @BindView(R.id.weather_view)
     WeatherView weatherView;
+    @BindView(R.id.tv_toolbar_title)
+    TextView tvToolbarTitle;
 
     private CompositeDisposable mWeatherDisposable;
     private String mTitle = " ";
@@ -83,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("");
+        tvToolbarTitle.setVisibility(View.INVISIBLE);
 
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             private boolean mIsTitleShow = false;
@@ -93,10 +97,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     mScrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (mScrollRange + verticalOffset == 0) {
-                    mToolbarLayout.setTitle(mTitle);
+                    tvToolbarTitle.setVisibility(View.VISIBLE);
                     mIsTitleShow = true;
                 } else if(mIsTitleShow) {
-                    mToolbarLayout.setTitle(" ");
+                    tvToolbarTitle.setVisibility(View.INVISIBLE);
                     mIsTitleShow = false;
                 }
             }
@@ -159,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
 
                             mTitle = String.format(Locale.getDefault(),"%s, %s", temperature, conditions);
+                            tvToolbarTitle.setText(mTitle);
                             Constants.weatherStatus status = Util.
                                     getWeatherStatus(currentWeather.getWeather().get(0).getId());
                             weatherView.setWeather(status);
