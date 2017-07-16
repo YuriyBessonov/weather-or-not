@@ -1,6 +1,7 @@
 package com.warinator.app.weatherornot.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -51,6 +52,8 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int NETWORK_TIMEOUT = 15;//сек.
+    private static final int REQUEST_CODE_LOCATION = 1;//сек.
+    private static final int DEFAULT_CITY_ID = 1496747;//Новосибирск
 
     @BindView(R.id.tb_main)
     Toolbar mToolbar;
@@ -84,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private String mTitle = " ";
     private WeatherListAdapter mWeatherListAdapter;
     private List<WeatherConditions> mWeatherConditionsList;
+    private int mCityID = DEFAULT_CITY_ID;
+    private String mCityName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,15 +152,31 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     @OnClick(R.id.iv_refresh)
-    public void onRefreshClick(){
+    public void startRefreshing(){
         laSwipeRefresh.setEnabled(true);
         laSwipeRefresh.setRefreshing(true);
         refreshWeather();
     }
 
+    @OnClick(R.id.iv_location)
+    public void pickLocation(){
+        Intent intent = LocationActivity.newIntent(this, mCityName);
+        startActivityForResult(intent, REQUEST_CODE_LOCATION);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {
+            return;
+        }
+        mCityID = data.getIntExtra(LocationActivity.RESULT_CITY_ID,
+                DEFAULT_CITY_ID);
+        startRefreshing();
+    }
 
     public void refreshWeather(){
-        Observable<CurrentWeather> currentWeatherObs = RetrofitClient.getWeatherApi().getCurrent("Novosibirsk");
+        Observable<CurrentWeather> currentWeatherObs =
+                RetrofitClient.getWeatherApi().getCurrent(mCityID);
         if (isNetworkConnected()){
             if (mWeatherDisposable != null){
                 mWeatherDisposable.dispose();
@@ -168,15 +189,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         public Observable<WeatherForecast> apply(@NonNull CurrentWeather currentWeather) throws Exception {
                             //TODO: изменить дату обновления
                             //TODO: сохранить погоду в БД
-                            String temperature = FormatUtil.getFormattedTemperature(currentWeather.getMain().getTemp());
+                            String temperature = FormatUtil
+                                    .getFormattedTemperature(currentWeather.getMain().getTemp());
                             String conditions = currentWeather.getWeather().get(0).getDescription();
                             tvWeatherDescr.setText(conditions);
                             tvWeatherDeg.setText(temperature);
-                            tvLocation.setText(currentWeather.getName());
-                            tvUpdated.setText(FormatUtil.getFormattedTime(Calendar.getInstance().getTime()));
+                            mCityName = currentWeather.getName();
+                            tvLocation.setText(mCityName);
+                            tvUpdated.setText(FormatUtil
+                                    .getFormattedTime(Calendar.getInstance().getTime()));
 
-                            int iconResId = Util.getIconResId(currentWeather.getWeather().get(0).getIcon(),
-                                    MainActivity.this);
+                            int iconResId = Util.getIconResId(
+                                    currentWeather.getWeather().get(0).getIcon(), MainActivity.this);
                             GlideApp.with(MainActivity.this)
                                     .load(iconResId)
                                     .transition(withCrossFade())
@@ -201,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                                 weatherView.startAnimation();
                             }
 
-                            return RetrofitClient.getWeatherApi().getForecast("Novosibirsk");
+                            return RetrofitClient.getWeatherApi().getForecast(mCityID);
                         }
                     })
                     .subscribeOn(Schedulers.io())
@@ -242,8 +266,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         return cm.getActiveNetworkInfo() != null;
     }
 
+
     @Override
     public void onRefresh() {
         refreshWeather();
     }
+
 }

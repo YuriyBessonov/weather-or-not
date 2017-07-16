@@ -29,9 +29,9 @@
     <string name="not_connected_to_internet">Отсуствует подключение к интернету</string>
     <string name="today">сегодня</string>
     <string name="forecast_details">Подробности прогноза</string>
-    <string name="format_wind"  formatted="false">"%s, %d м/с"</string>
-    <string name="format_percent_int"  formatted="false">"%d%%"</string>
-    <string name="format_pressure"  formatted="false">"%d мм рт. ст."</string>
+    <string name="format_wind" formatted="false">"%s, %d м/с"</string>
+    <string name="format_percent_int" formatted="false">"%d%%"</string>
+    <string name="format_pressure" formatted="false">"%d мм рт. ст."</string>
 
     <string-array name="wind_directions">
         <item>с</item>
@@ -51,5 +51,8 @@
         <item>сз</item>
         <item>ссз</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

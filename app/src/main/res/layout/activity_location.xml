@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.warinator.app.weatherornot.activity.LocationActivity">
+
+    <RelativeLayout
+        android:id="@+id/la_location_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:elevation="@dimen/elevation_toolbar"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="@dimen/margin_standard">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/la_location_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/btn_search"
+            android:layout_toRightOf="@+id/btn_back"
+            android:theme="@style/TextInputStyle">
+
+            <EditText
+                android:id="@+id/et_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Местоположение (на англ.)"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <ImageButton
+            android:id="@id/btn_back"
+            android:layout_width="@dimen/icon_width_standard"
+            android:layout_height="@dimen/icon_width_standard"
+            android:layout_alignBottom="@id/la_location_input"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="@dimen/margin_standard"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:src="@drawable/ic_back"
+            android:tint="@color/colorWhite"/>
+
+        <ImageButton
+            android:id="@+id/btn_search"
+            android:layout_width="@dimen/icon_width_standard"
+            android:layout_height="@dimen/icon_width_standard"
+            android:layout_alignBottom="@id/la_location_input"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/margin_standard"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:src="@drawable/ic_search"
+            android:tint="@color/colorWhite"/>
+
+        <Button
+            android:id="@+id/btn_stop_search"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/la_location_input"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:text="Остановить поиск"
+            android:textAllCaps="true"
+            android:textColor="@color/colorWhite"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv_cities"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/la_location_search">
+    </ListView>
+
+
+</RelativeLayout>

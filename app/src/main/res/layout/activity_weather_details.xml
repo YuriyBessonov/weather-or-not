@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/gradient_details"
+    android:background="@color/colorPrimary"
     tools:context="com.warinator.app.weatherornot.activity.WeatherDetailsActivity">
 
     <xyz.matteobattilana.library.WeatherView

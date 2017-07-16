@@ -1,9 +1,6 @@
 package com.warinator.app.weatherornot.util;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-
-import com.warinator.app.weatherornot.R;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -43,22 +40,23 @@ public class Util {
     }
 
 
+    public enum TimeOfDay {MORNING, AFTERNOON, EVENING, NIGHT}
 
-    public static int getTimeOfDayColor(Date date, Context context){
+    public static TimeOfDay getTimeOfDay(Date date, Context context){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         if (hour >= 0 && hour < 6){
-            return ContextCompat.getColor(context, R.color.colorNight);
+            return TimeOfDay.NIGHT;
         }
         else if (hour >= 6 && hour < 12){
-            return ContextCompat.getColor(context, R.color.colorMorning);
+            return TimeOfDay.MORNING;
         }
         else if (hour >= 12 && hour < 18 ){
-            return ContextCompat.getColor(context, R.color.colorDay);
+            return TimeOfDay.AFTERNOON;
         }
         else {
-            return ContextCompat.getColor(context, R.color.colorEvening);
+            return TimeOfDay.EVENING;
         }
     }
 

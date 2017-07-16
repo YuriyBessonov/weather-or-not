@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -56,7 +58,23 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         WeatherConditions weather = mWeatherList.get(position);
         Date date = new Date(weather.getDt()*1000);
 
-        holder.tvTime.setTextColor(Util.getTimeOfDayColor(date, mContext));
+        int timeColor = R.color.colorGreyDark;
+        switch (Util.getTimeOfDay(date, mContext)){
+            case MORNING:
+                timeColor = R.color.colorMorning;
+                break;
+            case AFTERNOON:
+                timeColor =  R.color.colorAfternoon;
+                break;
+            case EVENING:
+                timeColor = R.color.colorEvening;
+                break;
+            case NIGHT:
+                timeColor = R.color.colorNight;
+                break;
+        }
+        timeColor = ContextCompat.getColor(mContext, timeColor);
+        holder.tvTime.setTextColor(timeColor);
         holder.tvDate.setText(FormatUtil.getFormattedDate(date, mContext));
         holder.tvTime.setText(FormatUtil.getFormattedTime(date));
         holder.tvTemperature.setText(FormatUtil
@@ -90,6 +108,9 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         @BindView(R.id.la_weather_item)
         RelativeLayout laWeatherItem;
         private int mIconResId;
+        @BindView(R.id.la_card_weather_root)
+        FrameLayout laRoot;
+
 
         public ViewHolder(View itemView) {
             super(itemView);

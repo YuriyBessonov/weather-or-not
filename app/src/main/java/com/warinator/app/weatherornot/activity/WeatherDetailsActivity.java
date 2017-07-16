@@ -39,6 +39,7 @@ public class WeatherDetailsActivity extends AppCompatActivity {
     private static final String ARG_WEATHER_CODE = "weather_code";
     private static final String ARG_TRANSITION_NAME = "transition_name";
 
+
     @BindView(R.id.tb_weather_details)
     Toolbar toolbar;
     @BindView(R.id.iv_weather_icon)
@@ -94,6 +95,24 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         ivIcon.setImageResource(bundle.getInt(ARG_ICON));
         Date date = new Date( bundle.getLong(ARG_DATE_TIME)
                 *TimeUnit.SECONDS.toMillis(1));
+
+        int backgroundResID = R.color.colorPrimary;
+        switch (Util.getTimeOfDay(date, this)){
+            case MORNING:
+                backgroundResID = R.drawable.gradient_morning;
+                break;
+            case AFTERNOON:
+                backgroundResID = R.drawable.gradient_afternoon;
+                break;
+            case EVENING:
+                backgroundResID = R.drawable.gradient_evening;
+                break;
+            case NIGHT:
+                backgroundResID = R.drawable.gradient_night;
+                break;
+        }
+        laRoot.setBackgroundResource(backgroundResID);
+
         tvTime.setText(FormatUtil.getFormattedTime(date));
         tvDate.setText(FormatUtil.getFormattedDate(date, this));
         tvDescription.setText(bundle.getString(ARG_DESCRIPTION));
