@@ -1,12 +1,13 @@
-package com.warinator.app.weatherornot.model;
+package com.warinator.app.weatherornot.model.pojo;
 
 /**
  * Created by Warinator on 10.07.2017.
  */
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class CurrentWeather {
 
@@ -33,7 +34,7 @@ public class CurrentWeather {
     private Rain rain;
     @SerializedName("dt")
     @Expose
-    private int dt;
+    private long dt;
     @SerializedName("sys")
     @Expose
     private SysCurrent sys;
@@ -103,11 +104,11 @@ public class CurrentWeather {
         this.rain = rain;
     }
 
-    public int getDt() {
+    public long getDt() {
         return dt;
     }
 
-    public void setDt(int dt) {
+    public void setDt(long dt) {
         this.dt = dt;
     }
 

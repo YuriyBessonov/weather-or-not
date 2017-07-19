@@ -25,7 +25,7 @@
             android:layout_toRightOf="@+id/btn_back"
             android:theme="@style/TextInputStyle">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/et_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

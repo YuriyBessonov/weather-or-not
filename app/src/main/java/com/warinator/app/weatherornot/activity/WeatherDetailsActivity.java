@@ -19,7 +19,6 @@ import com.warinator.app.weatherornot.util.Util;
 
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,8 +92,7 @@ public class WeatherDetailsActivity extends AppCompatActivity {
 
     private void populate(Bundle bundle){
         ivIcon.setImageResource(bundle.getInt(ARG_ICON));
-        Date date = new Date( bundle.getLong(ARG_DATE_TIME)
-                *TimeUnit.SECONDS.toMillis(1));
+        Date date = new Date( bundle.getLong(ARG_DATE_TIME));
 
         int backgroundResID = R.color.colorPrimary;
         switch (Util.getTimeOfDay(date, this)){

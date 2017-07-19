@@ -3,20 +3,20 @@ package com.warinator.app.weatherornot.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.warinator.app.weatherornot.R;
-import com.warinator.app.weatherornot.model.City;
+import com.warinator.app.weatherornot.model.pojo.City;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,6 +47,7 @@ public class LocationActivity extends AppCompatActivity {
     private String mCityName;
     private ArrayAdapter mAdapter;
     private Disposable mSearchDisposable;
+    private boolean mIsSearching;
 
     public static Intent newIntent(Context context, String cityName){
         Intent intent = new Intent(context, LocationActivity.class);
@@ -57,7 +58,7 @@ public class LocationActivity extends AppCompatActivity {
     @BindView(R.id.lv_cities)
     ListView lvCities;
     @BindView(R.id.et_location)
-    EditText etLocation;
+    TextInputEditText etLocation;
     @BindView(R.id.la_location_input)
     TextInputLayout laLocationInput;
     @BindView(R.id.btn_stop_search)
@@ -72,7 +73,7 @@ public class LocationActivity extends AppCompatActivity {
             mCityList.clear();
             mCityNamesList.clear();
             mAdapter.notifyDataSetChanged();
-            btnStopSearch.setVisibility(View.VISIBLE);
+            setSearching(true);
             findCity(queryName);
         }
     }
@@ -80,6 +81,16 @@ public class LocationActivity extends AppCompatActivity {
     @OnClick(R.id.btn_back)
     void back(){
         finish();
+    }
+
+    private void setSearching(boolean isSearching){
+        mIsSearching = isSearching;
+        btnStopSearch.setVisibility(isSearching ? View.VISIBLE : View.GONE);
+    }
+
+    @OnClick(R.id.btn_stop_search)
+    public void stopSearching(){
+        setSearching(false);
     }
 
     @Override
@@ -95,7 +106,6 @@ public class LocationActivity extends AppCompatActivity {
             mCityName = "";
         }
         etLocation.setText(mCityName);
-
         mCityList = new ArrayList<>();
         mCityNamesList = new ArrayList<>();
 
@@ -104,6 +114,7 @@ public class LocationActivity extends AppCompatActivity {
         lvCities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                setSearching(false);
                 Intent intent = new Intent();
                 intent.putExtra(RESULT_CITY_ID, mCityList.get(position).getId());
                 setResult(RESULT_OK, intent);
@@ -112,9 +123,8 @@ public class LocationActivity extends AppCompatActivity {
         });
     }
 
-
-
     public void findCity(final String name){
+        mIsSearching = true;
         if (mSearchDisposable != null && !mSearchDisposable.isDisposed()){
             mSearchDisposable.dispose();
         }
@@ -128,7 +138,7 @@ public class LocationActivity extends AppCompatActivity {
                 jsonReader = new JsonReader(reader);
                 try {
                     jsonReader.beginArray();
-                    while (jsonReader.hasNext()){
+                    while (jsonReader.hasNext() && mIsSearching){
                         City city = gson.fromJson(jsonReader, City.class);
                         if (city.getName() != null && city.getName().equals(name)){
                             emitter.onNext(city);
@@ -157,15 +167,13 @@ public class LocationActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        btnStopSearch.setVisibility(View.GONE);
-                        Toast.makeText(LocationActivity.this,
-                                "во время поиска возникла ошибка",
-                                Toast.LENGTH_SHORT).show();
+                        setSearching(false);
+                        e.printStackTrace();
                     }
 
                     @Override
                     public void onComplete() {
-                        btnStopSearch.setVisibility(View.GONE);
+                        setSearching(false);
                         String message = mCityList.isEmpty() ?
                                 "Городов с таким названием не найдено" :
                                 "Поиск завершен";

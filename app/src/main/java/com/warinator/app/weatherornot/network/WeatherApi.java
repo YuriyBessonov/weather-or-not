@@ -1,7 +1,7 @@
 package com.warinator.app.weatherornot.network;
 
-import com.warinator.app.weatherornot.model.CurrentWeather;
-import com.warinator.app.weatherornot.model.WeatherForecast;
+import com.warinator.app.weatherornot.model.pojo.CurrentWeather;
+import com.warinator.app.weatherornot.model.pojo.WeatherForecast;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;

@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.warinator.app.weatherornot.GlideApp;
 import com.warinator.app.weatherornot.R;
 import com.warinator.app.weatherornot.activity.WeatherDetailsActivity;
-import com.warinator.app.weatherornot.model.WeatherConditions;
+import com.warinator.app.weatherornot.model.realm_model.StoredWeather;
 import com.warinator.app.weatherornot.util.FormatUtil;
 import com.warinator.app.weatherornot.util.Util;
 
@@ -38,10 +38,10 @@ import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOption
 
 public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.ViewHolder> {
 
-    private List<WeatherConditions> mWeatherList;
+    private List<StoredWeather> mWeatherList;
     private Context mContext;
 
-    public WeatherListAdapter(Context context, List<WeatherConditions> weatherList){
+    public WeatherListAdapter(Context context, List<StoredWeather> weatherList){
         mWeatherList = weatherList;
         mContext = context;
     }
@@ -55,8 +55,8 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        WeatherConditions weather = mWeatherList.get(position);
-        Date date = new Date(weather.getDt()*1000);
+        StoredWeather weather = mWeatherList.get(position);
+        Date date = new Date(weather.getDateTime());
 
         int timeColor = R.color.colorGreyDark;
         switch (Util.getTimeOfDay(date, mContext)){
@@ -78,8 +78,8 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         holder.tvDate.setText(FormatUtil.getFormattedDate(date, mContext));
         holder.tvTime.setText(FormatUtil.getFormattedTime(date));
         holder.tvTemperature.setText(FormatUtil
-                .getFormattedTemperature(weather.getMain().getTemp()));
-        int iconResId = Util.getIconResId(weather.getWeather().get(0).getIcon(),mContext);
+                .getFormattedTemperature(weather.getTemperature()));
+        int iconResId = Util.getIconResId(weather.getIcon(),mContext);
         GlideApp.with(mContext)
                 .load(iconResId)
                 .transition(withCrossFade())
@@ -87,7 +87,7 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         holder.mIconResId = iconResId;
 
         String transitionName = String.format(Locale.getDefault(),
-                "_%s%d", weather.getWeather().get(0).getIcon(), position);
+                "_%s%d", weather.getIcon(), position);
         ViewCompat.setTransitionName(holder.ivIcon, transitionName);
     }
 
@@ -120,15 +120,15 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
 
         @Override
         public void onClick(View view) {
-            WeatherConditions weather = mWeatherList.get(getAdapterPosition());
+            StoredWeather weather = mWeatherList.get(getAdapterPosition());
             WeatherDetailsActivity.IntentBuilder builder = new WeatherDetailsActivity
-                    .IntentBuilder(mContext, weather.getDt(), weather.getMain().getTemp())
-                    .description(weather.getWeather().get(0).getDescription())
-                    .humidity(weather.getMain().getHumidity())
-                    .pressure(weather.getMain().getPressure())
-                    .windDegrees(weather.getWind().getDeg())
-                    .windSpeed(weather.getWind().getSpeed())
-                    .weatherCode(weather.getWeather().get(0).getId())
+                    .IntentBuilder(mContext, weather.getDateTime(), weather.getTemperature())
+                    .description(weather.getDescription())
+                    .humidity(weather.getHumidity())
+                    .pressure(weather.getPressure())
+                    .windDegrees(weather.getWindDegrees())
+                    .windSpeed(weather.getWindSpeed())
+                    .weatherCode(weather.getWeatherCode())
                     .icon(mIconResId);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder.transitionName(ivIcon.getTransitionName());
