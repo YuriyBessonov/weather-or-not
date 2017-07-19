@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 }
             }
         });
-        
+
         rvWeatherList.setLayoutManager(new LinearLayoutManager(this));
         mForecast = new ArrayList<>();
         mWeatherListAdapter = new WeatherListAdapter(this, mForecast);

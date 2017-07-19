@@ -23,6 +23,7 @@
     </style>
 
     <style name="TextInputStyle" parent="AppTheme">
+        <item name="editTextColor">@color/colorWhite</item>
         <item name="android:editTextColor">@color/colorWhite</item>
         <item name="android:textColorHint">@color/colorGreyLight</item>
         <item name="android:textColorHighlight">@color/colorAccent</item>
