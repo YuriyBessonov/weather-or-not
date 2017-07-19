@@ -9,7 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -51,6 +53,10 @@ public class LocationActivity extends AppCompatActivity {
     TextInputLayout laLocationInput;
     @BindView(R.id.btn_stop_search)
     Button btnStopSearch;
+    @BindView(R.id.pb_search)
+    ProgressBar pbSearch;
+    @BindView(R.id.la_when_searching)
+    LinearLayout laWhenSearching;
     private List<City> mCityList;
     private List<String> mCityNamesList;
     private String mCityName;
@@ -89,7 +95,7 @@ public class LocationActivity extends AppCompatActivity {
     //Задать текущее состояние поиска (запущен или остановлен)
     private void setSearching(boolean isSearching) {
         mIsSearching = isSearching;
-        btnStopSearch.setVisibility(isSearching ? View.VISIBLE : View.GONE);
+        laWhenSearching.setVisibility(isSearching ? View.VISIBLE : View.GONE);
     }
 
     @OnClick(R.id.btn_stop_search)
@@ -125,7 +131,7 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     //Искать город с заданным названием, добавляя города в список по мере нахождения соответствий
-    public void findCity(final String name) {
+    private void findCity(final String name) {
         mIsSearching = true;
         if (mSearchDisposable != null && !mSearchDisposable.isDisposed()) {
             mSearchDisposable.dispose();

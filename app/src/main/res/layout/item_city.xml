@@ -11,5 +11,5 @@
           android:paddingRight="?android:attr/listPreferredItemPaddingRight"
           android:paddingStart="?android:attr/listPreferredItemPaddingStart"
           android:textAppearance="?android:attr/textAppearanceListItemSmall"
-          android:textColor="@color/colorWhite"
+          android:textColor="@color/colorGreyDark"
           tools:text="Item text"/>

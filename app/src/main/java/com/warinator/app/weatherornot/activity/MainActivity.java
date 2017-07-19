@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private static final int NETWORK_TIMEOUT = 15;//сек.
     private static final int REQUEST_CODE_LOCATION = 1;//сек.
+    private static final String ARG_RECYCLER_POSITION = "recycler_position";
 
     @BindView(R.id.tb_main)
     Toolbar mToolbar;
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 }
             }
         });
-
+        
         rvWeatherList.setLayoutManager(new LinearLayoutManager(this));
         mForecast = new ArrayList<>();
         mWeatherListAdapter = new WeatherListAdapter(this, mForecast);
@@ -144,8 +145,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         laSwipeRefresh.setOnRefreshListener(this::refreshWeather);
 
         mWeatherDisposable = new CompositeDisposable();
-        refreshWeather();
 
+        if (savedInstanceState == null) {
+            refreshWeather();
+        } else {
+            restoreWeather();
+        }
     }
 
     @Override
@@ -186,17 +191,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     //Сохранить в БД текущую погоду
-    public void saveWeather(StoredWeather currentWeather) {
+    private void saveWeather(StoredWeather currentWeather) {
         mStoredWeatherDAO.storeWeather(currentWeather);
     }
 
     //Сохранить в БД прогноз погоды
-    public void saveWeather(List<StoredWeather> forecast) {
+    private void saveWeather(List<StoredWeather> forecast) {
         mStoredWeatherDAO.storeForecast(forecast);
     }
 
     //Получить погоду из БД и отобразить её
-    public void restoreWeather() {
+    private void restoreWeather() {
         Observable.fromCallable(() -> mStoredWeatherDAO.getWeather())
                 .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
                 .concatMap(current -> {
@@ -207,26 +212,29 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<List<StoredWeather>>() {
-            @Override
-            public void onNext(@NonNull List<StoredWeather> allWeather) {
-                populateCurrentWeather(allWeather.get(0));
-                populateForecast(allWeather.subList(1, allWeather.size()));
-            }
+                    @Override
+                    public void onNext(@NonNull List<StoredWeather> allWeather) {
+                        populateCurrentWeather(allWeather.get(0));
+                        populateForecast(allWeather.subList(1, allWeather.size()));
+                    }
 
-            @Override
-            public void onError(@NonNull Throwable e) {
-                Log.e(getString(R.string.app_name), getClass().getSimpleName(), e);
-            }
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Log.e(getString(R.string.app_name), getClass().getSimpleName(), e);
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
     }
 
     //Отобразить текущую погоду
-    public void populateCurrentWeather(StoredWeather currentWeather) {
+    private void populateCurrentWeather(StoredWeather currentWeather) {
+        if (currentWeather == null) {
+            return;
+        }
         String temperature = FormatUtil
                 .getFormattedTemperature(currentWeather.getTemperature());
         String conditions = currentWeather.getDescription();
@@ -264,7 +272,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     //Отобразить прогноз
-    public void populateForecast(List<StoredWeather> forecast) {
+    private void populateForecast(List<StoredWeather> forecast) {
+        if (forecast == null || forecast.isEmpty()) {
+            return;
+        }
         laSwipeRefresh.setRefreshing(false);
         mForecast.clear();
         mForecast.addAll(forecast);
@@ -272,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     //Обновить и отобразить погоду
-    public void refreshWeather() {
+    private void refreshWeather() {
         Observable<CurrentWeather> currentWeatherObs =
                 RetrofitClient.getWeatherApi().getCurrent(mCityID,
                         getString(R.string.api_key_openweathermap));
@@ -335,7 +346,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;
     }
-
 
     @Override
     public void onRefresh() {

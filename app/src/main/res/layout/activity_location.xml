@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context="com.warinator.app.weatherornot.activity.LocationActivity">
 
     <RelativeLayout
         android:id="@+id/la_location_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        android:animateLayoutChanges="true"
+        android:background="@color/colorPrimary"
         android:elevation="@dimen/elevation_toolbar"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:padding="@dimen/margin_standard"
-        android:animateLayoutChanges="true">
+        android:paddingBottom="@dimen/margin_quarter"
+        android:paddingLeft="@dimen/margin_quarter"
+        android:paddingRight="@dimen/margin_quarter"
+        android:paddingTop="@dimen/margin_quarter">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/la_location_input"
@@ -57,18 +59,37 @@
             android:src="@drawable/ic_search"
             android:tint="@color/colorWhite"/>
 
-        <Button
-            android:id="@+id/btn_stop_search"
-            style="?android:attr/buttonBarButtonStyle"
+        <LinearLayout
+            android:id="@+id/la_when_searching"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/la_location_input"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/margin_half"
             android:layout_marginTop="@dimen/margin_standard"
-            android:text="@string/stop_searching"
-            android:textAllCaps="true"
-            android:textColor="@color/colorWhite"
-            android:visibility="gone"/>
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/pb_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:minHeight="@dimen/icon_width_standard"
+                android:minWidth="@dimen/icon_width_standard"/>
+
+            <Button
+                android:id="@+id/btn_stop_search"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/margin_standard"
+                android:text="@string/stop_searching"
+                android:textAllCaps="true"
+                android:textColor="@color/colorWhite"/>
+        </LinearLayout>
+
     </RelativeLayout>
 
     <ListView
