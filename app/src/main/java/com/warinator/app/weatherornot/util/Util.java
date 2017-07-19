@@ -12,11 +12,12 @@ import xyz.matteobattilana.library.Common.Constants;
  */
 
 public class Util {
-    private Util(){}
+    private Util() {
+    }
 
     public static int getIconResId(String iconName, Context context) {
-       return context.getResources().getIdentifier(String.format("_%s", iconName),
-               "drawable", context.getPackageName());
+        return context.getResources().getIdentifier(String.format("_%s", iconName),
+                "drawable", context.getPackageName());
     }
 
     public static int getBgrResId(String bgrName, Context context) {
@@ -24,8 +25,8 @@ public class Util {
                 "drawable", context.getPackageName());
     }
 
-    public static boolean dateIsToday(Date date){
-        if (date == null){
+    public static boolean dateIsToday(Date date) {
+        if (date == null) {
             return false;
         }
         Calendar calendar = Calendar.getInstance();
@@ -33,47 +34,41 @@ public class Util {
         Calendar today = Calendar.getInstance();
         if (calendar.get(Calendar.YEAR) == today.get(Calendar.YEAR)
                 && calendar.get(Calendar.MONTH) == today.get(Calendar.MONTH)
-                && calendar.get(Calendar.DATE) == today.get(Calendar.DATE)){
+                && calendar.get(Calendar.DATE) == today.get(Calendar.DATE)) {
             return true;
         }
         return false;
     }
 
-
-    public enum TimeOfDay {MORNING, AFTERNOON, EVENING, NIGHT}
-
-    public static TimeOfDay getTimeOfDay(Date date, Context context){
+    public static TimeOfDay getTimeOfDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        if (hour >= 0 && hour < 6){
+        if (hour >= 0 && hour < 6) {
             return TimeOfDay.NIGHT;
-        }
-        else if (hour >= 6 && hour < 12){
+        } else if (hour >= 6 && hour < 12) {
             return TimeOfDay.MORNING;
-        }
-        else if (hour >= 12 && hour < 18 ){
+        } else if (hour >= 12 && hour < 18) {
             return TimeOfDay.AFTERNOON;
-        }
-        else {
+        } else {
             return TimeOfDay.EVENING;
         }
     }
 
-    public static float hPaToMmHg(float hPa){
-        return hPa*0.75006f;
+    public static float hPaToMmHg(float hPa) {
+        return hPa * 0.75006f;
     }
 
-    public static Constants.weatherStatus getWeatherStatus(int weatherCode){
+    public static Constants.weatherStatus getWeatherStatus(int weatherCode) {
         int code = weatherCode / 100;
-        if (code == 2 || code == 3 || code == 5){
+        if (code == 2 || code == 3 || code == 5) {
             return Constants.weatherStatus.RAIN;
-        }
-        else if (code == 6){
+        } else if (code == 6) {
             return Constants.weatherStatus.SNOW;
-        }
-        else {
+        } else {
             return Constants.weatherStatus.SUN;
         }
     }
+
+    public enum TimeOfDay {MORNING, AFTERNOON, EVENING, NIGHT}
 }

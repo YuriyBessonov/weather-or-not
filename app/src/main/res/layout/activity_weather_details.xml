@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/la_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/la_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     tools:context="com.warinator.app.weatherornot.activity.WeatherDetailsActivity">
 
@@ -25,19 +25,21 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_weather_details"
         android:layout_width="match_parent"
-        android:theme="@style/AppTheme.AppBarOverlay"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="@dimen/elevation_toolbar"/>
+        android:elevation="@dimen/elevation_toolbar"
+        android:theme="@style/AppTheme.AppBarOverlay"/>
 
     <ScrollView
-        android:layout_below="@id/tb_weather_details"
-        android:layout_marginTop="@dimen/margin_x4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tb_weather_details"
+        android:layout_marginTop="@dimen/margin_x4">
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.Inverse">
+
             <RelativeLayout
                 android:id="@+id/la_weather_main"
                 android:layout_width="match_parent"
@@ -59,10 +61,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/margin_half"
-                    android:gravity="end"
                     android:layout_marginLeft="@dimen/margin_half"
-                    android:layout_toLeftOf="@id/iv_weather_icon">
+                    android:layout_marginRight="@dimen/margin_half"
+                    android:layout_toLeftOf="@id/iv_weather_icon"
+                    android:gravity="end">
 
                     <TextView
                         android:id="@+id/tv_time"
@@ -109,51 +111,55 @@
                 </RelativeLayout>
 
             </RelativeLayout>
+
             <android.support.v7.widget.CardView
                 android:id="@+id/cv_weather_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="@dimen/weather_card_elevation"
-                app:cardUseCompatPadding="true"
                 android:layout_below="@id/la_weather_main"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/margin_standard"
+                android:layout_marginLeft="@dimen/margin_standard"
                 android:layout_marginRight="@dimen/margin_standard"
-                android:layout_marginLeft="@dimen/margin_standard">
+                android:layout_marginTop="@dimen/margin_standard"
+                app:cardElevation="@dimen/weather_card_elevation"
+                app:cardUseCompatPadding="true">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/margin_standard"
-                    android:paddingBottom="@dimen/margin_standard"
                     android:layout_gravity="center"
-                    android:background="@color/colorPrimaryDark">
+                    android:background="@color/colorPrimaryDark"
+                    android:paddingBottom="@dimen/margin_standard"
+                    android:paddingTop="@dimen/margin_standard">
+
                     <GridLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:columnCount="2"
-                        android:layout_centerInParent="true">
+                        android:layout_centerInParent="true"
+                        android:columnCount="2">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/margin_standard"
-                            android:text="Ветер: "
+                            android:text="@string/wind"
                             android:textSize="@dimen/text_size_large_1"/>
 
                         <TextView
                             android:id="@+id/tv_wind"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
                             android:textSize="@dimen/text_size_large_1"
                             android:textStyle="normal|bold"
-                            android:textColor="@color/colorAccent"
                             tools:text="50 м/с"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/margin_standard"
-                            android:text="Влажность: "
                             android:layout_marginTop="@dimen/margin_half"
+                            android:text="@string/humidity"
                             android:textSize="@dimen/text_size_large_1"/>
 
                         <TextView
@@ -161,24 +167,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_half"
-                            android:textSize="@dimen/text_size_large_1"
                             android:textColor="@color/colorAccent"
+                            android:textSize="@dimen/text_size_large_1"
                             android:textStyle="normal|bold"
                             tools:text="83%"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_half"
                             android:layout_marginRight="@dimen/margin_standard"
-                            android:text="Давление: "
+                            android:layout_marginTop="@dimen/margin_half"
+                            android:text="@string/pressure"
                             android:textSize="@dimen/text_size_large_1"/>
 
                         <TextView
-                            android:layout_marginTop="@dimen/margin_half"
                             android:id="@+id/tv_pressure"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_half"
                             android:textColor="@color/colorAccent"
                             android:textSize="@dimen/text_size_large_1"
                             android:textStyle="normal|bold"

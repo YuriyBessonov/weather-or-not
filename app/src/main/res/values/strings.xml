@@ -1,37 +1,21 @@
 <resources>
     <string name="app_name">Weather or not</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Nulla elementum felis in ligula rhoncus, in tristique neque tempus. Morbi consequat maximus est,
-        convallis interdum enim sodales quis. Suspendisse eu lobortis arcu. Pellentesque a tempor enim.
-        Aliquam eleifend sed est vitae placerat. Duis tortor mi, pretium eu lorem at, venenatis faucibus lacus.
-        Nam imperdiet semper nunc, eu elementum est commodo eu. Cras urna ex, eleifend ac mauris eget, posuere porttitor
-        dolor. Aenean sit amet hendrerit orci. Donec finibus sed nisi eget condimentum. Praesent vulputate diam id magna
-        elementum tristique. Integer viverra venenatis felis, rhoncus varius ligula maximus et. Cras eu sem quis ex
-        egestas ornare. Curabitur velit leo, hendrerit non neque tincidunt, vehicula feugiat quam. In sollicitudin id
-        est posuere iaculis. Phasellus sit amet faucibus augue.  Vivamus eget velit porttitor mi feugiat consequat sit
-        amet vel elit. Maecenas vitae elit scelerisque, tempor velit condimentum, sollicitudin sapien. Orci varius
-        natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Fusce vitae ultricies eros. Vivamus
-        pellentesque velit bibendum tortor ultrices, ultricies cursus nulla vulputate. Quisque quis vulputate tellus.
-        Proin quis sem accumsan, pellentesque nibh sit amet, iaculis risus. Curabitur dui urna, gravida vitae ornare non,
-        efficitur sit amet odio. Aliquam cursus luctus venenatis. In fringilla, mauris at semper ultricies, est sapien
-        porta libero, ut gravida arcu tortor a lectus. Nullam vitae nisl interdum, scelerisque elit euismod, euismod
-        turpis. Nunc porttitor ipsum et dictum semper. Mauris non dictum massa, nec consectetur ante. Nunc velit metus,
-        malesuada sit amet elementum eget, tincidunt quis purus.  Suspendisse lacinia tincidunt sem id porta. Aliquam
-        quis dignissim eros. In hac habitasse platea dictumst. Aenean eget tincidunt turpis. Proin malesuada odio non
-        mattis sodales. Sed porta tortor quis ante tincidunt porta. Proin dictum feugiat odio a sagittis. Phasellus
-        maximus aliquam ipsum sit amet blandit. Vestibulum non iaculis eros, dictum tincidunt libero. Nulla id risus nec
-        libero gravida blandit sit amet et leo. Vestibulum vehicula suscipit vehicula.  Nullam sed ipsum faucibus,
-        pretium lacus quis, molestie tellus. Phasellus vel venenatis sem, et posuere diam. Mauris hendrerit in ligula
-        eget interdum. Suspendisse aliquam placerat nisi eu accumsan. Aenean eget tortor dictum, tincidunt velit a,
-        blandit tellus. In condimentum sit amet massa nec ultricies. Etiam bibendum placerat dolor, non elementum elit
-        ultrices ut. Vestibulum in diam vitae ante tristique tincidunt. Morbi lacus massa, rhoncus sit amet rhoncus nec,
-        iaculis ac nulla.</string>
+    <string name="api_key_openweathermap">ee149d0c39bbb291d9b5e1ce23a16301</string>
     <string name="not_connected_to_internet">Отсуствует подключение к интернету</string>
     <string name="today">сегодня</string>
     <string name="forecast_details">Подробности прогноза</string>
     <string name="format_wind" formatted="false">"%s, %d м/с"</string>
     <string name="format_percent_int" formatted="false">"%d%%"</string>
     <string name="format_pressure" formatted="false">"%d мм рт. ст."</string>
+    <string name="location_in_english">Местоположение (на англ.)</string>
+    <string name="stop_searching">Остановить поиск</string>
+    <string name="wind">"Ветер: "</string>
+    <string name="humidity">"Влажность: "</string>
+    <string name="pressure">"Давление: "</string>
+    <string name="no_cities_found_with_such_name">Городов с таким названием не найдено</string>
+    <string name="searching_completed">Поиск завершен</string>
+    <string name="format_location">%1$s (%2$s); коорд.: %3$f°, %4$f°</string>
+    <string name="cannot_refresh_weather">Не удалось обновить погоду</string>
 
     <string-array name="wind_directions">
         <item>с</item>
@@ -51,8 +35,5 @@
         <item>сз</item>
         <item>ссз</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

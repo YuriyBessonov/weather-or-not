@@ -16,10 +16,10 @@ import io.realm.annotations.PrimaryKey;
  */
 
 public class StoredWeather extends RealmObject {
-    @PrimaryKey
-    private int id;
     public static final String ID = "id";
     public static final int ID_CURRENT_WEATHER = 0;
+    @PrimaryKey
+    private int id;
     private String mCityName;
     private long mDateTime;
     private float mTemperature;
@@ -30,6 +30,42 @@ public class StoredWeather extends RealmObject {
     private float mWindSpeed;
     private float mPressure;
     private float mHumidity;
+
+    public static StoredWeather fromCurrentWeather(CurrentWeather currentWeather) {
+        StoredWeather weather = new StoredWeather();
+        weather.setId(ID_CURRENT_WEATHER);
+        weather.setCityName(currentWeather.getName());
+        weather.setDateTime(currentWeather.getDt() *
+                TimeUnit.SECONDS.toMillis(1));
+        weather.setTemperature(currentWeather.getMain().getTemp());
+        weather.setDescription(currentWeather.getWeather().get(0).getDescription());
+        weather.setIcon(currentWeather.getWeather().get(0).getIcon());
+        weather.setWeatherCode(currentWeather.getWeather().get(0).getId());
+        return weather;
+    }
+
+    public static List<StoredWeather> fromWeatherForecast(WeatherForecast forecast) {
+        List<WeatherConditions> conditionsList = forecast.getList();
+        List<StoredWeather> storedForecast = new ArrayList<>();
+        int i = 1;
+        for (WeatherConditions conditions : conditionsList) {
+            StoredWeather weather = new StoredWeather();
+            weather.setId(i++);
+            weather.setCityName(forecast.getCity().getName());
+            weather.setDateTime(conditions.getDt() *
+                    TimeUnit.SECONDS.toMillis(1));
+            weather.setTemperature(conditions.getMain().getTemp());
+            weather.setDescription(conditions.getWeather().get(0).getDescription());
+            weather.setIcon(conditions.getWeather().get(0).getIcon());
+            weather.setWeatherCode(conditions.getWeather().get(0).getId());
+            weather.setWindDegrees(conditions.getWind().getDeg());
+            weather.setWindSpeed(conditions.getWind().getSpeed());
+            weather.setPressure(conditions.getMain().getPressure());
+            weather.setHumidity(conditions.getMain().getHumidity());
+            storedForecast.add(weather);
+        }
+        return storedForecast;
+    }
 
     public int getId() {
         return id;
@@ -117,41 +153,5 @@ public class StoredWeather extends RealmObject {
 
     public void setHumidity(float humidity) {
         mHumidity = humidity;
-    }
-
-    public static StoredWeather fromCurrentWeather(CurrentWeather currentWeather){
-        StoredWeather weather = new StoredWeather();
-        weather.setId(ID_CURRENT_WEATHER);
-        weather.setCityName(currentWeather.getName());
-        weather.setDateTime(currentWeather.getDt()*
-                TimeUnit.SECONDS.toMillis(1));
-        weather.setTemperature(currentWeather.getMain().getTemp());
-        weather.setDescription(currentWeather.getWeather().get(0).getDescription());
-        weather.setIcon(currentWeather.getWeather().get(0).getIcon());
-        weather.setWeatherCode(currentWeather.getWeather().get(0).getId());
-        return weather;
-    }
-
-    public static List<StoredWeather> fromWeatherForecast(WeatherForecast forecast){
-        List<WeatherConditions> conditionsList = forecast.getList();
-        List<StoredWeather> storedForecast = new ArrayList<>();
-        int i = 1;
-        for (WeatherConditions conditions : conditionsList){
-            StoredWeather weather = new StoredWeather();
-            weather.setId(i++);
-            weather.setCityName(forecast.getCity().getName());
-            weather.setDateTime(conditions.getDt()*
-                    TimeUnit.SECONDS.toMillis(1));
-            weather.setTemperature(conditions.getMain().getTemp());
-            weather.setDescription(conditions.getWeather().get(0).getDescription());
-            weather.setIcon(conditions.getWeather().get(0).getIcon());
-            weather.setWeatherCode(conditions.getWeather().get(0).getId());
-            weather.setWindDegrees(conditions.getWind().getDeg());
-            weather.setWindSpeed(conditions.getWind().getSpeed());
-            weather.setPressure(conditions.getMain().getPressure());
-            weather.setHumidity(conditions.getMain().getHumidity());
-            storedForecast.add(weather);
-        }
-        return storedForecast;
     }
 }

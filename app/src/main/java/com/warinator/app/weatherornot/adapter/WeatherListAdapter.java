@@ -41,7 +41,7 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
     private List<StoredWeather> mWeatherList;
     private Context mContext;
 
-    public WeatherListAdapter(Context context, List<StoredWeather> weatherList){
+    public WeatherListAdapter(Context context, List<StoredWeather> weatherList) {
         mWeatherList = weatherList;
         mContext = context;
     }
@@ -59,12 +59,12 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         Date date = new Date(weather.getDateTime());
 
         int timeColor = R.color.colorGreyDark;
-        switch (Util.getTimeOfDay(date, mContext)){
+        switch (Util.getTimeOfDay(date)) {
             case MORNING:
                 timeColor = R.color.colorMorning;
                 break;
             case AFTERNOON:
-                timeColor =  R.color.colorAfternoon;
+                timeColor = R.color.colorAfternoon;
                 break;
             case EVENING:
                 timeColor = R.color.colorEvening;
@@ -79,7 +79,7 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         holder.tvTime.setText(FormatUtil.getFormattedTime(date));
         holder.tvTemperature.setText(FormatUtil
                 .getFormattedTemperature(weather.getTemperature()));
-        int iconResId = Util.getIconResId(weather.getIcon(),mContext);
+        int iconResId = Util.getIconResId(weather.getIcon(), mContext);
         GlideApp.with(mContext)
                 .load(iconResId)
                 .transition(withCrossFade())
@@ -107,9 +107,9 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
         ImageView ivIcon;
         @BindView(R.id.la_weather_item)
         RelativeLayout laWeatherItem;
-        private int mIconResId;
         @BindView(R.id.la_card_weather_root)
         FrameLayout laRoot;
+        private int mIconResId;
 
 
         public ViewHolder(View itemView) {
@@ -137,7 +137,7 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
             Intent intent = builder.build();
 
             ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    (Activity)mContext, ivIcon, ViewCompat.getTransitionName(ivIcon));
+                    (Activity) mContext, ivIcon, ViewCompat.getTransitionName(ivIcon));
             mContext.startActivity(intent, options.toBundle());
         }
     }

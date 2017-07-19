@@ -15,38 +15,29 @@ import static com.warinator.app.weatherornot.model.realm_model.StoredWeather.ID_
 
 public class StoredWeatherDAO {
 
-
-    public void storeForecast(final List<StoredWeather> forecast){
+    public void storeForecast(final List<StoredWeather> forecast) {
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmResults<StoredWeather> result =
-                        realm.where(StoredWeather.class)
-                                .greaterThan(StoredWeather.ID, ID_CURRENT_WEATHER).findAll();
-                result.deleteAllFromRealm();
-                realm.copyToRealm(forecast);
-            }
+        realm.executeTransaction(realm1 -> {
+            RealmResults<StoredWeather> result =
+                    realm1.where(StoredWeather.class)
+                            .greaterThan(StoredWeather.ID, ID_CURRENT_WEATHER).findAll();
+            result.deleteAllFromRealm();
+            realm1.copyToRealm(forecast);
         });
         realm.close();
     }
 
-    public void storeWeather(final StoredWeather currentWeather){
-        if (currentWeather.getId() != ID_CURRENT_WEATHER){
+    public void storeWeather(final StoredWeather currentWeather) {
+        if (currentWeather.getId() != ID_CURRENT_WEATHER) {
             throw new IllegalArgumentException(
-                    "У сохраняемой текущей погоды id должен быть равен "+ID_CURRENT_WEATHER);
+                    "У сохраняемой текущей погоды id должен быть равен " + ID_CURRENT_WEATHER);
         }
         Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(currentWeather);
-            }
-        });
+        realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(currentWeather));
         realm.close();
     }
 
-    public List<StoredWeather> getForecast(){
+    public List<StoredWeather> getForecast() {
         Realm realm = Realm.getDefaultInstance();
         List<StoredWeather> weatherList =
                 realm.copyFromRealm(realm.where(StoredWeather.class)
@@ -55,7 +46,7 @@ public class StoredWeatherDAO {
         return weatherList;
     }
 
-    public StoredWeather getWeather(){
+    public StoredWeather getWeather() {
         Realm realm = Realm.getDefaultInstance();
         StoredWeather currentWeather =
                 realm.copyFromRealm(realm.where(StoredWeather.class)

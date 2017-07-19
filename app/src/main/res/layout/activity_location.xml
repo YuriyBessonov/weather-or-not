@@ -29,7 +29,7 @@
                 android:id="@+id/et_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Местоположение (на англ.)"/>
+                android:hint="@string/location_in_english"/>
         </android.support.design.widget.TextInputLayout>
 
         <ImageButton
@@ -64,7 +64,7 @@
             android:layout_below="@id/la_location_input"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/margin_standard"
-            android:text="Остановить поиск"
+            android:text="@string/stop_searching"
             android:textAllCaps="true"
             android:textColor="@color/colorWhite"
             android:visibility="gone"/>

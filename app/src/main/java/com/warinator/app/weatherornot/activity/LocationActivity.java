@@ -7,7 +7,6 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -30,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -40,21 +38,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class LocationActivity extends AppCompatActivity {
 
-    private static final String ARG_CITY_NAME = "city_name";
     public static final String RESULT_CITY_ID = "city_id";
-    private List<City> mCityList;
-    private List<String> mCityNamesList;
-    private String mCityName;
-    private ArrayAdapter mAdapter;
-    private Disposable mSearchDisposable;
-    private boolean mIsSearching;
-
-    public static Intent newIntent(Context context, String cityName){
-        Intent intent = new Intent(context, LocationActivity.class);
-        intent.putExtra(ARG_CITY_NAME, cityName);
-        return intent;
-    }
-
+    private static final String ARG_CITY_NAME = "city_name";
     @BindView(R.id.lv_cities)
     ListView lvCities;
     @BindView(R.id.et_location)
@@ -63,13 +48,24 @@ public class LocationActivity extends AppCompatActivity {
     TextInputLayout laLocationInput;
     @BindView(R.id.btn_stop_search)
     Button btnStopSearch;
+    private List<City> mCityList;
+    private List<String> mCityNamesList;
+    private String mCityName;
+    private ArrayAdapter mAdapter;
+    private Disposable mSearchDisposable;
+    private boolean mIsSearching;
 
+    public static Intent newIntent(Context context, String cityName) {
+        Intent intent = new Intent(context, LocationActivity.class);
+        intent.putExtra(ARG_CITY_NAME, cityName);
+        return intent;
+    }
 
     @OnClick(R.id.btn_search)
-    void searchCity(){
+    void searchCity() {
         String queryName =
                 etLocation.getText().toString();
-        if (!queryName.isEmpty()){
+        if (!queryName.isEmpty()) {
             mCityList.clear();
             mCityNamesList.clear();
             mAdapter.notifyDataSetChanged();
@@ -79,17 +75,17 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.btn_back)
-    void back(){
+    void back() {
         finish();
     }
 
-    private void setSearching(boolean isSearching){
+    private void setSearching(boolean isSearching) {
         mIsSearching = isSearching;
         btnStopSearch.setVisibility(isSearching ? View.VISIBLE : View.GONE);
     }
 
     @OnClick(R.id.btn_stop_search)
-    public void stopSearching(){
+    public void stopSearching() {
         setSearching(false);
     }
 
@@ -99,57 +95,51 @@ public class LocationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_location);
         ButterKnife.bind(this);
 
-        if (getIntent() != null){
+        if (getIntent() != null) {
             mCityName = getIntent().getStringExtra(ARG_CITY_NAME);
         }
-        if (mCityName == null){
+        if (mCityName == null) {
             mCityName = "";
         }
         etLocation.setText(mCityName);
         mCityList = new ArrayList<>();
         mCityNamesList = new ArrayList<>();
 
-        mAdapter = new ArrayAdapter<>(this,R.layout.item_city, mCityNamesList);
+        mAdapter = new ArrayAdapter<>(this, R.layout.item_city, mCityNamesList);
         lvCities.setAdapter(mAdapter);
-        lvCities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                setSearching(false);
-                Intent intent = new Intent();
-                intent.putExtra(RESULT_CITY_ID, mCityList.get(position).getId());
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+        lvCities.setOnItemClickListener((parent, view, position, id) -> {
+            setSearching(false);
+            Intent intent = new Intent();
+            intent.putExtra(RESULT_CITY_ID, mCityList.get(position).getId());
+            setResult(RESULT_OK, intent);
+            finish();
         });
     }
 
-    public void findCity(final String name){
+    public void findCity(final String name) {
         mIsSearching = true;
-        if (mSearchDisposable != null && !mSearchDisposable.isDisposed()){
+        if (mSearchDisposable != null && !mSearchDisposable.isDisposed()) {
             mSearchDisposable.dispose();
         }
-        mSearchDisposable = Observable.create(new ObservableOnSubscribe<City>() {
-            @Override
-            public void subscribe(@NonNull ObservableEmitter<City> emitter) throws Exception {
-                Gson gson = new Gson();
-                JsonReader jsonReader;
-                InputStream inputStream = getResources().openRawResource(R.raw.cities);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                jsonReader = new JsonReader(reader);
-                try {
-                    jsonReader.beginArray();
-                    while (jsonReader.hasNext() && mIsSearching){
-                        City city = gson.fromJson(jsonReader, City.class);
-                        if (city.getName() != null && city.getName().equals(name)){
-                            emitter.onNext(city);
-                        }
+        mSearchDisposable = Observable.create((ObservableOnSubscribe<City>) emitter -> {
+            Gson gson = new Gson();
+            JsonReader jsonReader;
+            InputStream inputStream = getResources().openRawResource(R.raw.cities);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            jsonReader = new JsonReader(reader);
+            try {
+                jsonReader.beginArray();
+                while (jsonReader.hasNext() && mIsSearching) {
+                    City city = gson.fromJson(jsonReader, City.class);
+                    if (city.getName() != null && city.getName().equals(name)) {
+                        emitter.onNext(city);
                     }
-                    jsonReader.endArray();
-                    jsonReader.close();
-                    emitter.onComplete();
-                } catch (IOException e) {
-                    emitter.onError(e);
                 }
+                jsonReader.endArray();
+                jsonReader.close();
+                emitter.onComplete();
+            } catch (IOException e) {
+                emitter.onError(e);
             }
         })
                 .subscribeOn(Schedulers.io())
@@ -159,7 +149,7 @@ public class LocationActivity extends AppCompatActivity {
                     public void onNext(@NonNull City city) {
                         mCityList.add(city);
                         mCityNamesList.add(String.format(Locale.getDefault(),
-                                "%s (%s); коорд.: %f°, %f°",
+                                getString(R.string.format_location),
                                 city.getName(), city.getCountry(),
                                 city.getCoord().getLat(), city.getCoord().getLon()));
                         mAdapter.notifyDataSetChanged();
@@ -175,8 +165,8 @@ public class LocationActivity extends AppCompatActivity {
                     public void onComplete() {
                         setSearching(false);
                         String message = mCityList.isEmpty() ?
-                                "Городов с таким названием не найдено" :
-                                "Поиск завершен";
+                                getString(R.string.no_cities_found_with_such_name) :
+                                getString(R.string.searching_completed);
                         Toast.makeText(LocationActivity.this, message,
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -185,7 +175,7 @@ public class LocationActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (mSearchDisposable != null && !mSearchDisposable.isDisposed()){
+        if (mSearchDisposable != null && !mSearchDisposable.isDisposed()) {
             mSearchDisposable.dispose();
         }
         super.onDestroy();

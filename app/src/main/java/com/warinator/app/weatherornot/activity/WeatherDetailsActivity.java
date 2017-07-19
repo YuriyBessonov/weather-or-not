@@ -80,7 +80,7 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
+        if (bundle != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mTransitonName = bundle.getString(ARG_TRANSITION_NAME);
                 ivIcon.setTransitionName(mTransitonName);
@@ -90,12 +90,12 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         setupAnimations();
     }
 
-    private void populate(Bundle bundle){
+    private void populate(Bundle bundle) {
         ivIcon.setImageResource(bundle.getInt(ARG_ICON));
-        Date date = new Date( bundle.getLong(ARG_DATE_TIME));
+        Date date = new Date(bundle.getLong(ARG_DATE_TIME));
 
         int backgroundResID = R.color.colorPrimary;
-        switch (Util.getTimeOfDay(date, this)){
+        switch (Util.getTimeOfDay(date)) {
             case MORNING:
                 backgroundResID = R.drawable.gradient_morning;
                 break;
@@ -118,29 +118,28 @@ public class WeatherDetailsActivity extends AppCompatActivity {
                 bundle.getFloat(ARG_TEMPERATURE)));
 
         String windDirection = FormatUtil
-                .getWindDirection(bundle.getFloat(ARG_WIND_DEGREES),this);
+                .getWindDirection(bundle.getFloat(ARG_WIND_DEGREES), this);
         int windSpeed = Math.round(bundle.getFloat(ARG_WIND_SPEED));
         tvWind.setText(String.format(Locale.getDefault(), getString(R.string.format_wind),
                 windDirection, windSpeed));
         int humidity = Math.round(bundle.getFloat(ARG_HUMIDITY));
         tvHumidity.setText(String.format(Locale.getDefault(),
-                getString(R.string.format_percent_int), humidity ));
+                getString(R.string.format_percent_int), humidity));
         int pressure = Math.round(Util.hPaToMmHg(bundle.getFloat(ARG_PRESSURE)));
         tvPressure.setText(String.format(Locale.getDefault(),
-                    getString(R.string.format_pressure),pressure));
+                getString(R.string.format_pressure), pressure));
         Constants.weatherStatus status =
                 Util.getWeatherStatus(bundle.getInt(ARG_WEATHER_CODE));
         weatherView.setWeather(status);
-        if (status == Constants.weatherStatus.SUN){
+        if (status == Constants.weatherStatus.SUN) {
             weatherView.stopAnimation();
-        }
-        else {
+        } else {
             weatherView.startAnimation();
         }
 
     }
 
-    private void setupAnimations(){
+    private void setupAnimations() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.excludeTarget(android.R.id.statusBarBackground, true);
@@ -157,53 +156,53 @@ public class WeatherDetailsActivity extends AppCompatActivity {
     public static class IntentBuilder {
         private Intent mIntent;
 
-        public IntentBuilder(Context context, long dateTimeMs, float temperature){
+        public IntentBuilder(Context context, long dateTimeMs, float temperature) {
             mIntent = new Intent(context, WeatherDetailsActivity.class);
             mIntent.putExtra(ARG_DATE_TIME, dateTimeMs);
             mIntent.putExtra(ARG_TEMPERATURE, temperature);
         }
 
-        public IntentBuilder windDegrees(float degrees){
+        public IntentBuilder windDegrees(float degrees) {
             mIntent.putExtra(ARG_WIND_DEGREES, degrees);
             return this;
         }
 
-        public IntentBuilder windSpeed(float speed){
+        public IntentBuilder windSpeed(float speed) {
             mIntent.putExtra(ARG_WIND_SPEED, speed);
             return this;
         }
 
-        public IntentBuilder icon(int iconRes){
+        public IntentBuilder icon(int iconRes) {
             mIntent.putExtra(ARG_ICON, iconRes);
             return this;
         }
 
-        public IntentBuilder description(String description){
+        public IntentBuilder description(String description) {
             mIntent.putExtra(ARG_DESCRIPTION, description);
             return this;
         }
 
-        public IntentBuilder humidity(float humidity){
+        public IntentBuilder humidity(float humidity) {
             mIntent.putExtra(ARG_HUMIDITY, humidity);
             return this;
         }
 
-        public IntentBuilder pressure(float pressure){
+        public IntentBuilder pressure(float pressure) {
             mIntent.putExtra(ARG_PRESSURE, pressure);
             return this;
         }
 
-        public IntentBuilder transitionName(String transitionName){
+        public IntentBuilder transitionName(String transitionName) {
             mIntent.putExtra(ARG_TRANSITION_NAME, transitionName);
             return this;
         }
 
-        public IntentBuilder weatherCode(int weatherCode){
+        public IntentBuilder weatherCode(int weatherCode) {
             mIntent.putExtra(ARG_WEATHER_CODE, weatherCode);
             return this;
         }
 
-        public Intent build(){
+        public Intent build() {
             return mIntent;
         }
     }

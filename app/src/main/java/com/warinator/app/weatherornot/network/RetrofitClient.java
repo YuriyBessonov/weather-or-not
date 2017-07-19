@@ -15,10 +15,10 @@ public class RetrofitClient {
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
     private static WeatherApi weatherApi;
 
-    public static WeatherApi getWeatherApi(){
-        OkHttpClient client = null;
+    public static WeatherApi getWeatherApi() {
+        OkHttpClient client;
 
-        if (weatherApi == null){
+        if (weatherApi == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             client = new OkHttpClient.Builder().addInterceptor(interceptor).build();

@@ -13,35 +13,35 @@ import java.util.Locale;
  */
 
 public class FormatUtil {
-    private FormatUtil(){}
+    private FormatUtil() {
+    }
 
-    public static String getFormattedDate(Date date, Context context){
-        if (!Util.dateIsToday(date)){
+    public static String getFormattedDate(Date date, Context context) {
+        if (!Util.dateIsToday(date)) {
             SimpleDateFormat sdf = new SimpleDateFormat("E, d MMMM", Locale.getDefault());
             return sdf.format(date);
-        }
-        else {
+        } else {
             return String.format("%s, %s", new SimpleDateFormat("E",
-                    Locale.getDefault()).format(date),
+                            Locale.getDefault()).format(date),
                     context.getString(R.string.today));
         }
 
     }
 
-    public static String getFormattedTime(Date date){
+    public static String getFormattedTime(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
         return sdf.format(date);
     }
 
-    public static String getFormattedTemperature(float temperature){
-        return String.format(Locale.getDefault(),"%+d",
+    public static String getFormattedTemperature(float temperature) {
+        return String.format(Locale.getDefault(), "%+d",
                 Math.round(temperature));
     }
 
-    public static String getWindDirection(float windDegree, Context context){
+    public static String getWindDirection(float windDegree, Context context) {
         String[] directions = context.getResources().
                 getStringArray(R.array.wind_directions);
-        int ind = (int) ((windDegree/22.5)+.5);
+        int ind = (int) ((windDegree / 22.5) + .5);
         return directions[ind % directions.length];
     }
 }

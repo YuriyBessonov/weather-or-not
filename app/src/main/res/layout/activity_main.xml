@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/la_main_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -139,11 +139,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@null"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp"
                 app:layout_anchor="@id/la_collapsing_toolbar"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp">
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -172,19 +172,19 @@
                         android:tint="@color/colorWhite"/>
 
                     <TextView
-                        tools:text="Новосибирск, 12:03"
                         android:id="@+id/tv_toolbar_title"
+                        style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="@dimen/margin_standard"
                         android:layout_marginRight="@dimen/margin_standard"
-                        android:layout_toRightOf="@id/iv_location"
                         android:layout_toLeftOf="@id/iv_refresh"
+                        android:layout_toRightOf="@id/iv_location"
+                        android:ellipsize="end"
                         android:gravity="center"
                         android:lines="1"
-                        android:ellipsize="end"
-                        style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+                        tools:text="Новосибирск, 12:03"/>
 
                 </RelativeLayout>
 
@@ -194,7 +194,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/la_swipe_refresh"
         android:layout_width="match_parent"
@@ -202,13 +201,12 @@
         android:scrollbars="none"
         app:behavior_overlapTop="@dimen/toolbar_overlap_top"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_weather_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:listitem="@layout/item_weather"/>
     </android.support.v4.widget.SwipeRefreshLayout>
-
-
 
 </android.support.design.widget.CoordinatorLayout>

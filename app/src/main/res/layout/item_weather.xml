@@ -11,9 +11,9 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/weather_card_padding"
         android:background="@color/colorPrimaryDark"
         app:cardElevation="@dimen/weather_card_elevation"
-        android:layout_marginTop="@dimen/weather_card_padding"
         app:cardUseCompatPadding="true">
 
         <FrameLayout

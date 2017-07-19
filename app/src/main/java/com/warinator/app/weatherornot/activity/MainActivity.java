@@ -23,7 +23,6 @@ import com.warinator.app.weatherornot.R;
 import com.warinator.app.weatherornot.adapter.WeatherListAdapter;
 import com.warinator.app.weatherornot.dao.StoredWeatherDAO;
 import com.warinator.app.weatherornot.model.pojo.CurrentWeather;
-import com.warinator.app.weatherornot.model.pojo.WeatherForecast;
 import com.warinator.app.weatherornot.model.realm_model.StoredWeather;
 import com.warinator.app.weatherornot.network.RetrofitClient;
 import com.warinator.app.weatherornot.util.FormatUtil;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -45,7 +43,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
@@ -114,13 +111,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mAppBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             private boolean mIsTitleShow = false;
             private int mScrollRange = -1;
+
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (verticalOffset >= 0){
+                if (verticalOffset >= 0) {
                     laSwipeRefresh.setEnabled(true);
-                }
-                else if (!laSwipeRefresh.isRefreshing())
-                {
+                } else if (!laSwipeRefresh.isRefreshing()) {
                     laSwipeRefresh.setEnabled(false);
                 }
                 if (mScrollRange == -1) {
@@ -129,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 if (mScrollRange + verticalOffset == 0) {
                     tvToolbarTitle.setVisibility(View.VISIBLE);
                     mIsTitleShow = true;
-                } else if(mIsTitleShow) {
+                } else if (mIsTitleShow) {
                     tvToolbarTitle.setVisibility(View.INVISIBLE);
                     mIsTitleShow = false;
                 }
@@ -138,16 +134,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         rvWeatherList.setLayoutManager(new LinearLayoutManager(this));
         mForecast = new ArrayList<>();
-        mWeatherListAdapter = new WeatherListAdapter(this,mForecast);
+        mWeatherListAdapter = new WeatherListAdapter(this, mForecast);
         rvWeatherList.setAdapter(mWeatherListAdapter);
         rvWeatherList.setItemAnimator(new DefaultItemAnimator());
 
-        laSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshWeather();
-            }
-        });
+        laSwipeRefresh.setOnRefreshListener(this::refreshWeather);
 
         mWeatherDisposable = new CompositeDisposable();
         refreshWeather();
@@ -156,21 +147,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     protected void onDestroy() {
-        if (mWeatherDisposable != null && !mWeatherDisposable.isDisposed()){
+        if (mWeatherDisposable != null && !mWeatherDisposable.isDisposed()) {
             mWeatherDisposable.dispose();
         }
         super.onDestroy();
     }
 
     @OnClick(R.id.iv_refresh)
-    public void startRefreshing(){
+    public void startRefreshing() {
         laSwipeRefresh.setEnabled(true);
         laSwipeRefresh.setRefreshing(true);
         refreshWeather();
     }
 
     @OnClick(R.id.iv_location)
-    public void pickLocation(){
+    public void pickLocation() {
         Intent intent = LocationActivity.newIntent(this, mCityName);
         startActivityForResult(intent, REQUEST_CODE_LOCATION);
     }
@@ -181,37 +172,31 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             return;
         }
         int newCityId = data.getIntExtra(LocationActivity.RESULT_CITY_ID, DEFAULT_CITY_ID);
-        if (mCityID != newCityId){
+        if (mCityID != newCityId) {
             mCityID = newCityId;
             new PrefUtil(this).setCityID(mCityID);
             startRefreshing();
         }
     }
 
-    public void saveWeather(StoredWeather currentWeather){
+    public void saveWeather(StoredWeather currentWeather) {
         mStoredWeatherDAO.storeWeather(currentWeather);
     }
 
-    public void saveWeather(List<StoredWeather> forecast){
+    public void saveWeather(List<StoredWeather> forecast) {
         mStoredWeatherDAO.storeForecast(forecast);
     }
 
-    public void restoreWeather(){
-        Observable.fromCallable(new Callable<StoredWeather>() {
-            @Override
-            public StoredWeather call() throws Exception {
-                return mStoredWeatherDAO.getWeather();
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
-                .concatMap(new Function<StoredWeather, Observable<List<StoredWeather>>>() {
-            @Override
-            public Observable<List<StoredWeather>> apply(@NonNull StoredWeather current) throws Exception {
-                List<StoredWeather> allWeather = new ArrayList<>();
-                allWeather.add(current);
-                allWeather.addAll(mStoredWeatherDAO.getForecast());
-                return Observable.just(allWeather);
-            }
-        }).observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<List<StoredWeather>>() {
+    public void restoreWeather() {
+        Observable.fromCallable(() -> mStoredWeatherDAO.getWeather())
+                .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
+                .concatMap(current -> {
+                    List<StoredWeather> allWeather = new ArrayList<>();
+                    allWeather.add(current);
+                    allWeather.addAll(mStoredWeatherDAO.getForecast());
+                    return Observable.just(allWeather);
+                })
+                .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<List<StoredWeather>>() {
             @Override
             public void onNext(@NonNull List<StoredWeather> allWeather) {
                 populateCurrentWeather(allWeather.get(0));
@@ -230,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
-    public void populateCurrentWeather(StoredWeather currentWeather){
+    public void populateCurrentWeather(StoredWeather currentWeather) {
         String temperature = FormatUtil
                 .getFormattedTemperature(currentWeather.getTemperature());
         String conditions = currentWeather.getDescription();
@@ -260,62 +245,52 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         Constants.weatherStatus status = Util.
                 getWeatherStatus(currentWeather.getWeatherCode());
         weatherView.setWeather(status);
-        if (status == Constants.weatherStatus.SUN){
+        if (status == Constants.weatherStatus.SUN) {
             weatherView.stopAnimation();
-        }
-        else {
+        } else {
             weatherView.startAnimation();
         }
     }
 
-    public void populateForecast(List<StoredWeather> forecast){
+    public void populateForecast(List<StoredWeather> forecast) {
         laSwipeRefresh.setRefreshing(false);
         mForecast.clear();
         mForecast.addAll(forecast);
         mWeatherListAdapter.notifyDataSetChanged();
     }
 
-    public void refreshWeather(){
+    public void refreshWeather() {
         Observable<CurrentWeather> currentWeatherObs =
-                RetrofitClient.getWeatherApi().getCurrent(mCityID);
-        if (isNetworkConnected()){
-            if (mWeatherDisposable != null){
+                RetrofitClient.getWeatherApi().getCurrent(mCityID,
+                        getString(R.string.api_key_openweathermap));
+        if (isNetworkConnected()) {
+            if (mWeatherDisposable != null) {
                 mWeatherDisposable.dispose();
             }
             mWeatherDisposable = currentWeatherObs
                     .observeOn(Schedulers.io())
                     .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-                    .concatMap(new Function<CurrentWeather, Observable<StoredWeather>>() {
-                        @Override
-                        public Observable<StoredWeather> apply(@NonNull CurrentWeather currentWeather)
-                                throws Exception {
-                            StoredWeather current = StoredWeather.fromCurrentWeather(currentWeather);
-                            saveWeather(current);
-                            return Observable.just(current);
-                        }
+                    .concatMap(currentWeather -> {
+                        StoredWeather current = StoredWeather.fromCurrentWeather(currentWeather);
+                        saveWeather(current);
+                        return Observable.just(current);
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .concatMap(new Function<StoredWeather, Observable<WeatherForecast>>() {
-                        @Override
-                        public Observable<WeatherForecast> apply(@NonNull StoredWeather current)
-                                throws Exception {
-                            populateCurrentWeather(current);
-                            return RetrofitClient.getWeatherApi().getForecast(mCityID);
-                        }
+                    .concatMap(current -> {
+                        populateCurrentWeather(current);
+                        return RetrofitClient.getWeatherApi().getForecast(mCityID,
+                                getString(R.string.api_key_openweathermap));
                     })
                     .subscribeOn(Schedulers.io())
                     .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
                     .observeOn(Schedulers.io())
-                    .concatMap(new Function<WeatherForecast, Observable<List<StoredWeather>>>() {
-                        @Override
-                        public Observable<List<StoredWeather>> apply(@NonNull WeatherForecast weatherForecast) throws Exception {
-                            List<StoredWeather> forecast = StoredWeather.fromWeatherForecast(weatherForecast);
-                            saveWeather(forecast);
-                            return Observable.just(forecast);
-                        }
+                    .concatMap(weatherForecast -> {
+                        List<StoredWeather> forecast = StoredWeather.fromWeatherForecast(weatherForecast);
+                        saveWeather(forecast);
+                        return Observable.just(forecast);
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<List<StoredWeather>>(){
+                    .subscribeWith(new DisposableObserver<List<StoredWeather>>() {
                         @Override
                         public void onNext(@NonNull List<StoredWeather> forecast) {
                             populateForecast(forecast);
@@ -324,69 +299,21 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         @Override
                         public void onError(@NonNull Throwable e) {
                             laSwipeRefresh.setRefreshing(false);
-                            Toast.makeText(MainActivity.this,"Не удалось обновить погоду", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.cannot_refresh_weather, Toast.LENGTH_SHORT).show();
                             Log.e(getString(R.string.app_name), getClass().getSimpleName(), e);
                             restoreWeather();
                         }
 
                         @Override
-                        public void onComplete() {}
+                        public void onComplete() {
+                        }
                     });
-        }
-        else {
+        } else {
             laSwipeRefresh.setRefreshing(false);
             Toast.makeText(MainActivity.this,
                     R.string.not_connected_to_internet, Toast.LENGTH_SHORT).show();
             restoreWeather();
         }
-    }
-
-    public void refreshWeatherOld(){
-        Observable<CurrentWeather> currentWeatherObs =
-                RetrofitClient.getWeatherApi().getCurrent(mCityID);
-        if (isNetworkConnected()){
-            if (mWeatherDisposable != null){
-                mWeatherDisposable.dispose();
-            }
-            mWeatherDisposable = currentWeatherObs
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-                    .concatMap(new Function<CurrentWeather, Observable<WeatherForecast>>() {
-                        @Override
-                        public Observable<WeatherForecast> apply(@NonNull CurrentWeather currentWeather) throws Exception {
-                            //TODO: сохранить погоду в БД
-
-
-                            return RetrofitClient.getWeatherApi().getForecast(mCityID);
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .timeout(NETWORK_TIMEOUT, TimeUnit.SECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(new DisposableObserver<WeatherForecast>(){
-                        @Override
-                        public void onNext(@NonNull WeatherForecast forecast) {
-
-                        }
-
-                        @Override
-                        public void onError(@NonNull Throwable e) {
-                            laSwipeRefresh.setRefreshing(false);
-                            Toast.makeText(MainActivity.this,"Не удалось обновить погоду", Toast.LENGTH_SHORT).show();
-                            Log.e(getString(R.string.app_name), "", e);
-                        }
-
-                        @Override
-                        public void onComplete() {}
-                    });
-        }
-        else {
-            laSwipeRefresh.setRefreshing(false);
-            Toast.makeText(MainActivity.this,
-                    R.string.not_connected_to_internet, Toast.LENGTH_SHORT).show();
-            //TODO: загрузить погоду из БД
-        }
-
     }
 
     //проверить наличие подключения к интернету
