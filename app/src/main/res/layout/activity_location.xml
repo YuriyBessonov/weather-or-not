@@ -15,7 +15,8 @@
         android:elevation="@dimen/elevation_toolbar"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:padding="@dimen/margin_standard">
+        android:padding="@dimen/margin_standard"
+        android:animateLayoutChanges="true">
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/la_location_input"

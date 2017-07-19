@@ -12,9 +12,8 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by Warinator on 16.07.2017.
+ * Модель сохраняемой погоды
  */
-
 public class StoredWeather extends RealmObject {
     public static final String ID = "id";
     public static final int ID_CURRENT_WEATHER = 0;
@@ -31,6 +30,7 @@ public class StoredWeather extends RealmObject {
     private float mPressure;
     private float mHumidity;
 
+    //Преобразователь объекта CurrentWeather в объект данного класса
     public static StoredWeather fromCurrentWeather(CurrentWeather currentWeather) {
         StoredWeather weather = new StoredWeather();
         weather.setId(ID_CURRENT_WEATHER);
@@ -44,6 +44,7 @@ public class StoredWeather extends RealmObject {
         return weather;
     }
 
+    //Преобразователь объекта WeatherForecast в список объектов данного класса
     public static List<StoredWeather> fromWeatherForecast(WeatherForecast forecast) {
         List<WeatherConditions> conditionsList = forecast.getList();
         List<StoredWeather> storedForecast = new ArrayList<>();

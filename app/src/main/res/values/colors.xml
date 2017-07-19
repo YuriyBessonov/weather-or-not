@@ -8,6 +8,7 @@
     <color name="colorPrimaryTransparent">#663F51B5</color>
     <color name="colorWhite">#F5F5F5</color>
     <color name="colorGreyVeryLight">#EEEEEE</color>
+    <color name="colorGreyLight">#BDBDBD</color>
     <color name="colorGrey">#757575</color>
     <color name="colorGreyDark">#424242</color>
 

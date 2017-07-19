@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * Created by Warinator on 16.07.2017.
+ * Класс для работы с настройками
  */
-
 public class PrefUtil {
     private static final String APP_PREFERENCES = "weatherornot_preferences";
     private static final String APP_PREFERENCES_CITY_ID = "city_id";
@@ -18,12 +17,14 @@ public class PrefUtil {
         mPreferences = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
     }
 
+    //Сохранить id текущего города
     public void setCityID(int cityID){
         SharedPreferences.Editor editor = mPreferences.edit();
         editor.putInt(APP_PREFERENCES_CITY_ID, cityID);
         editor.apply();
     }
 
+    //Получить id текущего города
     public int getCityID(){
         if (mPreferences.contains(APP_PREFERENCES_CITY_ID)){
             return mPreferences.getInt(APP_PREFERENCES_CITY_ID, DEFAULT_CITY_ID);

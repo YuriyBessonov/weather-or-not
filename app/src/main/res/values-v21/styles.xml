@@ -26,7 +26,7 @@
 
     <style name="TextInputStyle" parent="AppTheme">
         <item name="android:editTextColor">@color/colorWhite</item>
-        <item name="android:textColorHint">@color/colorPrimaryLight</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
         <item name="android:textColorHighlight">@color/colorPrimary</item>
 
         <item name="colorControlNormal">@color/colorPrimary</item>
@@ -34,17 +34,5 @@
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>
     </style>
 
-    <style name="TextInputStyleFull" parent="AppTheme">
-        <item name="android:textColor">@color/colorGrey</item>
-        <item name="android:textColorPrimary">@color/colorWhite</item>
-        <item name="android:textColorSecondary">@color/colorWhite</item>
-        <item name="android:textColorTertiary">@color/colorWhite</item>
-        <item name="android:editTextColor">@color/colorWhite</item>
-        <item name="android:textColorHint">@color/colorPrimaryLight</item>
-
-        <item name="colorControlNormal">@color/colorPrimaryLight</item>
-        <item name="colorControlActivated">@color/colorPrimaryLight</item>
-        <item name="colorControlHighlight">@color/colorPrimaryLight</item>
-    </style>
 
 </resources>

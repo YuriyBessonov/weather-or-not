@@ -52,6 +52,9 @@ import xyz.matteobattilana.library.WeatherView;
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 import static com.warinator.app.weatherornot.util.PrefUtil.DEFAULT_CITY_ID;
 
+/**
+ * Активность главного экрана
+ */
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int NETWORK_TIMEOUT = 15;//сек.
@@ -153,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onDestroy();
     }
 
+    //Инициировать обновление погоды
     @OnClick(R.id.iv_refresh)
     public void startRefreshing() {
         laSwipeRefresh.setEnabled(true);
@@ -160,12 +164,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         refreshWeather();
     }
 
+    //Перейти к активности выбора местоположения
     @OnClick(R.id.iv_location)
     public void pickLocation() {
         Intent intent = LocationActivity.newIntent(this, mCityName);
         startActivityForResult(intent, REQUEST_CODE_LOCATION);
     }
 
+    //Инициировать получение погоды для обновленного местоположения
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
@@ -179,14 +185,17 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
     }
 
+    //Сохранить в БД текущую погоду
     public void saveWeather(StoredWeather currentWeather) {
         mStoredWeatherDAO.storeWeather(currentWeather);
     }
 
+    //Сохранить в БД прогноз погоды
     public void saveWeather(List<StoredWeather> forecast) {
         mStoredWeatherDAO.storeForecast(forecast);
     }
 
+    //Получить погоду из БД и отобразить её
     public void restoreWeather() {
         Observable.fromCallable(() -> mStoredWeatherDAO.getWeather())
                 .subscribeOn(Schedulers.io()).observeOn(Schedulers.io())
@@ -196,7 +205,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     allWeather.addAll(mStoredWeatherDAO.getForecast());
                     return Observable.just(allWeather);
                 })
-                .observeOn(AndroidSchedulers.mainThread()).subscribeWith(new DisposableObserver<List<StoredWeather>>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<List<StoredWeather>>() {
             @Override
             public void onNext(@NonNull List<StoredWeather> allWeather) {
                 populateCurrentWeather(allWeather.get(0));
@@ -215,6 +225,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
+    //Отобразить текущую погоду
     public void populateCurrentWeather(StoredWeather currentWeather) {
         String temperature = FormatUtil
                 .getFormattedTemperature(currentWeather.getTemperature());
@@ -252,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
     }
 
+    //Отобразить прогноз
     public void populateForecast(List<StoredWeather> forecast) {
         laSwipeRefresh.setRefreshing(false);
         mForecast.clear();
@@ -259,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mWeatherListAdapter.notifyDataSetChanged();
     }
 
+    //Обновить и отобразить погоду
     public void refreshWeather() {
         Observable<CurrentWeather> currentWeatherObs =
                 RetrofitClient.getWeatherApi().getCurrent(mCityID,
@@ -299,7 +312,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                         @Override
                         public void onError(@NonNull Throwable e) {
                             laSwipeRefresh.setRefreshing(false);
-                            Toast.makeText(MainActivity.this, R.string.cannot_refresh_weather, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.cannot_refresh_weather,
+                                    Toast.LENGTH_SHORT).show();
                             Log.e(getString(R.string.app_name), getClass().getSimpleName(), e);
                             restoreWeather();
                         }
@@ -316,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
     }
 
-    //проверить наличие подключения к интернету
+    //Проверить наличие подключения к интернету
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null;

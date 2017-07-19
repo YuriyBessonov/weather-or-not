@@ -8,9 +8,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by Warinator on 10.07.2017.
+ * Класс для работы с Retrofit
  */
-
 public class RetrofitClient {
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
     private static WeatherApi weatherApi;

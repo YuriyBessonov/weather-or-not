@@ -16,6 +16,7 @@
     <string name="searching_completed">Поиск завершен</string>
     <string name="format_location">%1$s (%2$s); коорд.: %3$f°, %4$f°</string>
     <string name="cannot_refresh_weather">Не удалось обновить погоду</string>
+    <string name="input_city_name">Введите название города!</string>
 
     <string-array name="wind_directions">
         <item>с</item>

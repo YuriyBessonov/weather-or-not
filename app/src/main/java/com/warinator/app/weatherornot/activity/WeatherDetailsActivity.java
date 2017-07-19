@@ -25,6 +25,9 @@ import butterknife.ButterKnife;
 import xyz.matteobattilana.library.Common.Constants;
 import xyz.matteobattilana.library.WeatherView;
 
+/**
+ * Активность подробностей прогноза
+ */
 public class WeatherDetailsActivity extends AppCompatActivity {
 
     private static final String ARG_DATE_TIME = "date_time";
@@ -37,7 +40,6 @@ public class WeatherDetailsActivity extends AppCompatActivity {
     private static final String ARG_PRESSURE = "pressure";
     private static final String ARG_WEATHER_CODE = "weather_code";
     private static final String ARG_TRANSITION_NAME = "transition_name";
-
 
     @BindView(R.id.tb_weather_details)
     Toolbar toolbar;
@@ -87,9 +89,10 @@ public class WeatherDetailsActivity extends AppCompatActivity {
             }
             populate(bundle);
         }
-        setupAnimations();
+        setupAnimation();
     }
 
+    //Отобразить подробности погоды из Bundle
     private void populate(Bundle bundle) {
         ivIcon.setImageResource(bundle.getInt(ARG_ICON));
         Date date = new Date(bundle.getLong(ARG_DATE_TIME));
@@ -139,7 +142,8 @@ public class WeatherDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void setupAnimations() {
+    //Настроить анимацию входа/выхода активности
+    private void setupAnimation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Slide slide = new Slide(Gravity.BOTTOM);
             slide.excludeTarget(android.R.id.statusBarBackground, true);
@@ -153,6 +157,9 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Класс, позволяющиё формировать Intent для запуска этой активности
+     */
     public static class IntentBuilder {
         private Intent mIntent;
 

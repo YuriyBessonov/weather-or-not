@@ -32,10 +32,10 @@ import butterknife.ButterKnife;
 
 import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
 
-/**
- * Created by Warinator on 11.07.2017.
- */
 
+/**
+ * Адаптер прогноза погоды
+ */
 public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.ViewHolder> {
 
     private List<StoredWeather> mWeatherList;
@@ -73,6 +73,7 @@ public class WeatherListAdapter extends RecyclerView.Adapter<WeatherListAdapter.
                 timeColor = R.color.colorNight;
                 break;
         }
+
         timeColor = ContextCompat.getColor(mContext, timeColor);
         holder.tvTime.setTextColor(timeColor);
         holder.tvDate.setText(FormatUtil.getFormattedDate(date, mContext));

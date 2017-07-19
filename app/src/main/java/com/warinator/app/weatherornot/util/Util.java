@@ -8,23 +8,25 @@ import java.util.Date;
 import xyz.matteobattilana.library.Common.Constants;
 
 /**
- * Created by Warinator on 10.07.2017.
+ * Утилитный класс общего назначения
  */
-
 public class Util {
     private Util() {
     }
 
+    //Получить id ресурса иконки погоды по имени иконки
     public static int getIconResId(String iconName, Context context) {
         return context.getResources().getIdentifier(String.format("_%s", iconName),
                 "drawable", context.getPackageName());
     }
 
-    public static int getBgrResId(String bgrName, Context context) {
-        return context.getResources().getIdentifier(String.format("b%s", bgrName),
+    //Получить id ресурса фона погоды по имени иконки
+    public static int getBgrResId(String iconName, Context context) {
+        return context.getResources().getIdentifier(String.format("b%s", iconName),
                 "drawable", context.getPackageName());
     }
 
+    //Узнать, является ли дата сегодняшней
     public static boolean dateIsToday(Date date) {
         if (date == null) {
             return false;
@@ -40,6 +42,7 @@ public class Util {
         return false;
     }
 
+    //Получить время суток
     public static TimeOfDay getTimeOfDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -55,6 +58,7 @@ public class Util {
         }
     }
 
+    //Перевести гектопаскали в мм рт. ст.
     public static float hPaToMmHg(float hPa) {
         return hPa * 0.75006f;
     }
@@ -70,5 +74,11 @@ public class Util {
         }
     }
 
-    public enum TimeOfDay {MORNING, AFTERNOON, EVENING, NIGHT}
+    //Время суток
+    public enum TimeOfDay {
+        MORNING,
+        AFTERNOON,
+        EVENING,
+        NIGHT
+    }
 }

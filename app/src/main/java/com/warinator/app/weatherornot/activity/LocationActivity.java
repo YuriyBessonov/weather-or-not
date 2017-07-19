@@ -36,6 +36,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * Активность выбора местоположения
+ */
 public class LocationActivity extends AppCompatActivity {
 
     public static final String RESULT_CITY_ID = "city_id";
@@ -61,6 +64,7 @@ public class LocationActivity extends AppCompatActivity {
         return intent;
     }
 
+    //Инициировать поиск города с указанным названием в поле etLocation
     @OnClick(R.id.btn_search)
     void searchCity() {
         String queryName =
@@ -72,6 +76,9 @@ public class LocationActivity extends AppCompatActivity {
             setSearching(true);
             findCity(queryName);
         }
+        else {
+            Toast.makeText(this, R.string.input_city_name, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @OnClick(R.id.btn_back)
@@ -79,6 +86,7 @@ public class LocationActivity extends AppCompatActivity {
         finish();
     }
 
+    //Задать текущее состояние поиска (запущен или остановлен)
     private void setSearching(boolean isSearching) {
         mIsSearching = isSearching;
         btnStopSearch.setVisibility(isSearching ? View.VISIBLE : View.GONE);
@@ -116,6 +124,7 @@ public class LocationActivity extends AppCompatActivity {
         });
     }
 
+    //Искать город с заданным названием, добавляя города в список по мере нахождения соответствий
     public void findCity(final String name) {
         mIsSearching = true;
         if (mSearchDisposable != null && !mSearchDisposable.isDisposed()) {

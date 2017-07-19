@@ -10,11 +10,11 @@ import io.realm.RealmResults;
 import static com.warinator.app.weatherornot.model.realm_model.StoredWeather.ID_CURRENT_WEATHER;
 
 /**
- * Created by Warinator on 18.07.2017.
+ * DAO сохраняемой в БД погоды
  */
-
 public class StoredWeatherDAO {
 
+    //Сохранить прогноз
     public void storeForecast(final List<StoredWeather> forecast) {
         Realm realm = Realm.getDefaultInstance();
         realm.executeTransaction(realm1 -> {
@@ -27,6 +27,7 @@ public class StoredWeatherDAO {
         realm.close();
     }
 
+    //Сохранить погоду
     public void storeWeather(final StoredWeather currentWeather) {
         if (currentWeather.getId() != ID_CURRENT_WEATHER) {
             throw new IllegalArgumentException(
@@ -37,6 +38,7 @@ public class StoredWeatherDAO {
         realm.close();
     }
 
+    //Получить прогноз
     public List<StoredWeather> getForecast() {
         Realm realm = Realm.getDefaultInstance();
         List<StoredWeather> weatherList =
@@ -46,6 +48,7 @@ public class StoredWeatherDAO {
         return weatherList;
     }
 
+    //Получить текущую погоду
     public StoredWeather getWeather() {
         Realm realm = Realm.getDefaultInstance();
         StoredWeather currentWeather =
