@@ -1,5 +1,34 @@
-# Weather or not
+# Weather or not 
 Простое погодное приложение
+
+## Описание
+
+Приложение позволяет узнать текущую погоду и прогноз на 5 дней через каждые 3 часа на основе данных openweathermap.org.
+Фон основного экрана меняется в зависимости от времени суток и погодных условий. На основном экране и экране подробностей
+прогноза осадки (дождь, снег) сопровождаются эффектами на экране.
+
+## Использованы
+
+- Retrofit 2
+- RxJava
+- Butter Knife
+- Glide
+- [WeatherView](https://github.com/MatteoBattilana/WeatherView)
+- RetroLambda
+- Realm
+
+## Скриншоты
+
+![Screenshot](/screenshots/1.png?raw=true)
+![Screenshot](/screenshots/2.png?raw=true)
+![Screenshot](/screenshots/3.png?raw=true)
+![Screenshot](/screenshots/4.png?raw=true)
+![Screenshot](/screenshots/5.png?raw=true)
+![Screenshot](/screenshots/6.png?raw=true)
+![Screenshot](/screenshots/7.png?raw=true)
+![Screenshot](/screenshots/8.png?raw=true)
+![Screenshot](/screenshots/9.png?raw=true)
+
 
 ## License
 MIT License
